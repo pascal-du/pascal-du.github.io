@@ -23,33 +23,44 @@
     <section>
         <article class="card">
             <h3>
-                [1] “Paper 1”
+                [1] “Honeypot Allocation for Network Hardening in Industrial Control Systems”
                 <em>Final Year Project for BSc Computer Science</em>, May 2025.
             </h3>
             <p>
                 <strong>Authors:</strong> Pascal U
             </p>
             <p>
-                <strong>Abstract:</strong> lorem ipsum etc.
+                <strong>Abstract:</strong> This project studies the problem of network hardening in industrial control systems (ICSs) given an administrator having limited resources to allocate.
+                ICSs are a frequent target of attacks because of their importance to infrastructure and their notoriety for utilising legacy systems.
+                Honeypots (HPs) have been used as a form of intrusion detection system which can detect a vast swathe of possible attacks.
+                However, given that the administrator can only afford to have a select number HPs within a system, an allocation technique is required.
+                I propose a game-theoretic framework, which models a defender and attacker against each other, both attempting to maximise their stated goals.
+                This is done through a reward function that rewards the defender for successfully intercepting an attack, but penalises it for non-interceptions.
+                The attacker's reward function is the direct inverse of this and as such this game is what is called a Zero-Sum game.
+                The creation and preparation of the game-action space is done by utilising a novel graph generator and reducing it through creating what are known as CAGs so that the complexity of the action space is reasonable for large network sizes.
+                Analysis is conducted on various graph topology sizes in evaluating the performance and scalability of the model, including varying key parameters and their effects on the game outcome.
             </p>
             <p>
-                <a href="papers/graph-partitioning.pdf" target="_blank">Download PDF</a>
+                <a href="papers/FYP_REPORT_redacted.pdf" target="_blank">PDF</a>
             </p>
         </article>
 
         <article class="card">
             <h3>
-                [2] “Paper 2”
-                <em>Coursework at University of Surrey</em>, December 2024.
+                [2] “Chest X-Ray Image Enhancement Using The LED Framework”
+                <em>Deep Learning and Advanced AI Coursework</em>, May 2025.
             </h3>
             <p>
-                <strong>Authors:</strong> Pascal U, etc.
+                <strong>Authors:</strong> Pascal U, Ted Arlidge, Dawid Grzywocz
             </p>
             <p>
-                <strong>Abstract:</strong> lorem ipsum etc.
+                <strong>Abstract:</strong> Using the LED diffusion model as a framework, we evaluate its effectiveness in enhancing low quality chest x-rays (CXR).
+                The dataset used is a subset of the PadChest dataset containing 1000 super-negative exposure (low-quality) CXR images, and 1000 near-zero exposure (high-quality).
+                Following the LED framework, we first implement a CycleGAN to learn a degradation mapping between unpaired high-quality and low-quality images, creating a paired dataset of high-quality images and their generated mapping.
+                Then a conditional diffusion model is trained to learn the inverse. Evaluating on a pre-trained ResNet-18 model, our enhancing diffuser demonstrates improvement in diagnostic accuracy on low-quality CXRs from 56.6% to 66.3%, narrowing most of the gap to high-quality images (73.9%).
             </p>
             <p>
-                <a href="papers/ml-compiler.pdf" target="_blank">Download PDF</a>
+                <a href="papers/DEEP_CW.pdf" target="_blank">PDF</a>
             </p>
         </article>
 
