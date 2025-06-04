@@ -1,4 +1,4 @@
-/* style.css (dark mode) */
+/* style.css (dark mode, links in white) */
 
 /* Base reset */
 * {
@@ -41,13 +41,12 @@ nav ul {
 
 nav a {
     text-decoration: none;
-    color: #bb86fc;                    /* Muted purple accent */
+    color: #ffffff;                    /* Links in navigation are now white */
     font-weight: 500;
 }
 
 nav a:hover {
     text-decoration: underline;
-    color: #ffffff;                    /* On hover, pure white */
 }
 
 /* Section headings */
@@ -61,6 +60,16 @@ h2 {
 /* Content sections */
 section {
     margin-top: 1rem;
+}
+
+/* Style all other links */
+a {
+    color: #ffffff;                    /* All hyperlinks in body content are white */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 /* Project and paper listings */
@@ -80,15 +89,6 @@ section {
 
 .card p {
     color: #cccccc;                    /* Slightly lighter gray for body text in cards */
-}
-
-.card a {
-    color: #bb86fc;                    /* Accent color for links inside cards */
-}
-
-.card a:hover {
-    text-decoration: underline;
-    color: #ffffff;
 }
 
 /* Footer */
