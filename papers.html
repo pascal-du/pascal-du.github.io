@@ -5,6 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Papers – Pascal U</title>
     <link rel="stylesheet" href="style.css" />
+    <style>
+        .hidden-content {
+            display: none;
+        }
+
+        .view-btn {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+            background: none;
+            border: none;
+        }
+
+        .counter {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -21,33 +38,37 @@
     </header>
 
     <section>
+        <!-- Example for article [1] -->
         <article class="card">
             <h3>
-                [1] “Honeypot Allocation for Network Hardening in Industrial Control Systems”
+                [<span class="counter"></span>] “Honeypot Allocation for Network Hardening in Industrial Control Systems”
                 <em>Final Year Project for BSc Computer Science</em>, May 2025.
             </h3>
-            <p>
-                <strong>Authors:</strong> Pascal U
-            </p>
+            <p><strong>Authors:</strong> Pascal U</p>
             <p>
                 <strong>Abstract:</strong> This project studies the problem of network hardening in industrial control systems (ICSs) given an administrator having limited resources to allocate.
-                ICSs are a frequent target of attacks because of their importance to infrastructure and their notoriety for utilising legacy systems.
-                Honeypots (HPs) have been used as a form of intrusion detection system which can detect a vast swathe of possible attacks.
-                However, given that the administrator can only afford to have a select number HPs within a system, an allocation technique is required.
-                I propose a game-theoretic framework, which models a defender and attacker against each other, both attempting to maximise their stated goals.
-                This is done through a reward function that rewards the defender for successfully intercepting an attack, but penalises it for non-interceptions.
-                The attacker's reward function is the direct inverse of this and as such this game is what is called a Zero-Sum game.
-                The creation and preparation of the game-action space is done by utilising a novel graph generator and reducing it through creating what are known as CAGs so that the complexity of the action space is reasonable for large network sizes.
-                Analysis is conducted on various graph topology sizes in evaluating the performance and scalability of the model, including varying key parameters and their effects on the game outcome.
+
+                <span class="hidden-content">
+                    ICSs are a frequent target of attacks because of their importance to infrastructure and their notoriety for utilising legacy systems.
+                    Honeypots (HPs) have been used as a form of intrusion detection system which can detect a vast swathe of possible attacks.
+                    However, given that the administrator can only afford to have a select number HPs within a system, an allocation technique is required.
+                    I propose a game-theoretic framework, which models a defender and attacker against each other, both attempting to maximise their stated goals.
+                    This is done through a reward function that rewards the defender for successfully intercepting an attack, but penalises it for non-interceptions.
+                    The attacker's reward function is the direct inverse of this and as such this game is what is called a Zero-Sum game.
+                    The creation and preparation of the game-action space is done by utilising a novel graph generator and reducing it through creating what are known as CAGs so that the complexity of the action space is reasonable for large network sizes.
+                    Analysis is conducted on various graph topology sizes in evaluating the performance and scalability of the model, including varying key parameters and their effects on the game outcome.
+                </span>
+                <button class="view-btn">View more...</button>
             </p>
             <p>
                 <a href="papers/FYP_REPORT_redacted.pdf" target="_blank">PDF</a>
             </p>
         </article>
 
+        <!-- Repeat the above structure for each article, changing the content accordingly -->
         <article class="card">
             <h3>
-                [2] “Chest X-Ray Image Enhancement Using The LED Framework”
+                [<span class="counter"></span>] “Chest X-Ray Image Enhancement Using The LED Framework”
                 <em>Deep Learning and Advanced AI Coursework</em>, May 2025.
             </h3>
             <p>
@@ -55,9 +76,12 @@
             </p>
             <p>
                 <strong>Abstract:</strong> Using the LED diffusion model as a framework, we evaluate its effectiveness in enhancing low quality chest x-rays (CXR).
+                <span class="hidden-content">
                 The dataset used is a subset of the PadChest dataset containing 1000 super-negative exposure (low-quality) CXR images, and 1000 near-zero exposure (high-quality).
                 Following the LED framework, we first implement a CycleGAN to learn a degradation mapping between unpaired high-quality and low-quality images, creating a paired dataset of high-quality images and their generated mapping.
                 Then a conditional diffusion model is trained to learn the inverse. Evaluating on a pre-trained ResNet-18 model, our enhancing diffuser demonstrates improvement in diagnostic accuracy on low-quality CXRs from 56.6% to 66.3%, narrowing most of the gap to high-quality images (73.9%).
+                </span>
+                <button class="view-btn">View more...</button>
             </p>
             <p>
                 <a href="papers/DEEP_CW.pdf" target="_blank">PDF</a>
@@ -66,29 +90,33 @@
 
         <article class="card">
             <h3>
-                [3] Lecture Notes for Weeks 1-6 
+                [<span class="counter"></span>] Lecture Notes for Weeks 1-6 
                 <em>Deep Learning and Advanced AI</em>, May 2025.
             </h3>
             <p>
                 <strong>ChatGPT overview:</strong> This review document provides a concise overview of key deep-learning and advanced AI concepts, beginning with the Transformer architecture and its core self-attention mechanism (including multi-head attention, residual connections, masking, and positional encodings such as sinusoidal, RoPE, and ALiBi);
+                <span class="hidden-content">
                 it then explores large language and multimodal models (covering LLMs, Vision-Language Models, Mixture of Experts, parameter-efficient fine-tuning, extended-context transformers, and normalization techniques); proceeds to Vision Transformers alongside various autoencoder structures (standard, variational, masked, and U-Net segmentation networks);
                 and concludes with generative modelling frameworks (detailing the Evidence Lower Bound for VAEs, diffusion processes and Stable/Late Diffusion strategies, as well as adversarial methods like GANs and CycleGANs for unpaired image translation).
+                </span>
+                <button class="view-btn">View more...</button>
             </p>
             <p>
                 <a href="papers/DEEP_review.pdf" target="_blank">PDF</a>
             </p>
         </article>
 
-        <!-- Add further paper entries as needed -->
-
         <article class="card">
             <h3>
-                [4] Part A: 
+                [<span class="counter"></span>] Part A: 
                 <em>Ethical Hacking and Pentesting Coursework</em>, May 2025.
             </h3>
             <p>
                 This assignment is based on labs 2 and 3, which cover XSS, CSRF, and shellshock, three common vulnerabilities found in web applications.
+                <span class="hidden-content">
                 The report will therefore be presented in three sections. The tasks refer to the lab exercises, although not all lab exercises are to be used in the report.
+                </span>
+                <button class="view-btn">View more...</button>
             </p>
             <p>
                 <a href="papers/ethical_hacking_a_redacted.pdf" target="_blank">PDF</a>
@@ -97,13 +125,16 @@
 
         <article class="card">
             <h3>
-                [5] Part B: 
+                [<span class="counter"></span>] Part B: 
                 <em>Ethical Hacking and Pentesting Coursework</em>, May 2025.
             </h3>
             <p>
                 The objective of this coursework is to analyse an ELF binary using various inspection tools.
+                <span class="hidden-content">
                 The coursework is modelled on the static analysis lab.
                 Students will complete the tasks detailed below and submit a structured report answering specific questions about ELF headers, sections, segments, symbol tables, the GOT, and the PLT.
+                </span>
+                <button class="view-btn">View more...</button>
             </p>
             <p>
                 <a href="papers/ethical_hacking_b_redacted.pdf" target="_blank">PDF</a>
@@ -112,16 +143,19 @@
 
         <article class="card">
             <h3>
-                [6] Lecture Notes for Weeks 1-10 
+                [<span class="counter"></span>] Lecture Notes for Weeks 1-10 
                 <em>Ethical Hacking and Pentesting</em>, May 2025.
             </h3>
             <p>
                 <strong>ChatGPT overview:</strong> This review synthesizes core ethical‐hacking and penetration-testing topics:
+                <span class="hidden-content">
                 it begins with web security fundamentals (HTTP, cookies, SQL injection, clickjacking), then examines common web-based attacks like CSRF and XSS;
                 it proceeds to system vulnerabilities including Shellshock, format-string exploits, buffer overflows, and associated shellcode techniques;
                 it covers low-level perspectives on C compilation, ELF binaries, assembly, the call stack, and binary analysis;
                 surveys malware classes (Trojans, viruses, worms, droppers, backdoors, botnets, ransomware, wipers, cryptominers);
                 and concludes with networking essentials (IP/UDP/TCP mechanics, ARP, firewalls, DNS spoofing/rebinding, and transport-layer attacks).
+                </span>
+                <button class="view-btn">View more...</button>
             </p>
             <p>
                 <a href="papers/ethical_hacking_review.pdf" target="_blank">PDF</a>
@@ -130,17 +164,21 @@
 
         <article class="card">
             <h3>
-                [7] “A Novel Approach to Optimising Convolutional Neural Networks based on the Ant Colony Optimiser”
+                [<span class="counter"></span>] “A Novel Approach to Optimising Convolutional Neural Networks based on the Ant Colony Optimiser”
                 <em>Computational Intelligence Coursework</em>, Dec 2024.
             </h3>
             <p>
                 <strong>Authors:</strong> Ted Arlidge, Saul Roche, Pascal U
             </p>
             <p>
-                <strong>Abstract:</strong> This paper explores the application of Continuous Ant Colony Optimisation (CACO) for optimising Convolutional Neural Networks (CNNs) and compares its performance to popular gradient descent and population-based optimisation algorithms.
+                <strong>Abstract:</strong> This paper explores the application of Continuous Ant Colony Optimisation (CACO) for optimising Convolutional Neural Networks (CNNs) 
+                <span class="hidden-content">
+                and compares its performance to popular gradient descent and population-based optimisation algorithms.
                 The study evaluates these optimisation techniques in the context of training CNNs to classify images from the CIFAR- 10 dataset, a standard benchmark widely used for training in machine learning problems.
                 Our analysis shows that gradient descent continues to outperform population-based in terms of efficiency and accuracy.
                 However, CACO achieves the best loss due to its superior ability to reach generalised solutions, and we discuss the relative advantages and limitations which lead to this result.
+                </span>
+                <button class="view-btn">View more...</button>
             </p>
             <p>
                 <a href="papers/COMP_INT_CW_redacted.pdf" target="_blank">PDF</a>
@@ -149,13 +187,17 @@
 
         <article class="card">
             <h3>
-                [8] Lecture Notes for Weeks 7-10 
+                [<span class="counter"></span>] Lecture Notes for Weeks 7-10 
                 <em>Privacy Enhancing Technologies</em>, Jan 2025.
             </h3>
             <p>
-                <strong>ChatGPT overview:</strong> This document delivers concise revision notes on Privacy Enhancing Technologies, spanning weeks 7–10: it begins with secure messaging—defining IND-CPA/CCA security, digital‐signature unforgeability, AEAD schemes, key‐derivation chains, and the Double Ratchet/Signal protocol’s privacy guarantees;
+                <strong>ChatGPT overview:</strong> This document delivers concise revision notes on Privacy Enhancing Technologies, spanning weeks 7–10: it begins with 
+                <span class="hidden-content">
+                secure messaging—defining IND-CPA/CCA security, digital‐signature unforgeability, AEAD schemes, key‐derivation chains, and the Double Ratchet/Signal protocol’s privacy guarantees;
                 moves to private‐function evaluation, covering MLS’s TreeKEM group key management, ElGamal (and exponentiation) homomorphic properties, lattice problems, LWE-based encryption, and the foundations of leveled and fully homomorphic encryption;
                 and concludes with privacy-preserving machine learning—including CryptoNets and TFHE schemes for encrypted inference, differential‐privacy mechanisms and theorems, federated learning models (cross-device and cross-silo), and secure aggregation via masking, homomorphic encryption, and multiparty computation.
+                </span>
+                <button class="view-btn">View more...</button>
             </p>
             <p>
                 <a href="papers/PET_Notes.pdf" target="_blank">PDF</a>
@@ -166,5 +208,24 @@
     <footer>
         &copy; 2025 Pascal U. All rights reserved.
     </footer>
+
+    <script>
+        document.querySelectorAll('.view-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const hiddenContent = button.previousElementSibling;
+                if (hiddenContent.style.display === 'none' || hiddenContent.style.display === '') {
+                    hiddenContent.style.display = 'inline';
+                    button.textContent = 'View less...';
+                } else {
+                    hiddenContent.style.display = 'none';
+                    button.textContent = 'View more...';
+                }
+            });
+        });
+
+        document.querySelectorAll('.counter').forEach((counter, index) => {
+            counter.textContent = index + 1;
+        });
+    </script>
 </body>
 </html>
