@@ -2,250 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>FYP</title>
+  <title>GENIND Topology</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     #controls { margin: 1em; }
-    #container { width: 800px; height: 600px; background: #8e8e8e; border: 1px solid #272727; }
+    #controls input { width: 4em; margin-right: 0.5em; }
+    #container { width: 800px; height: 600px; background: #252525; border: 1px solid #505050; }
   </style>
-  <!-- Graphology first -->
+
+  <!-- core libs -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/graphology/0.25.4/graphology.umd.min.js"></script>
-  <!-- Add after loading graphology -->
-  <script src="libs/graphology-layout-forceatlas2.min.js"></script>
-  <!-- Sigma next -->
+  <script src="./libs/graphology-layout-forceatlas2.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/2.4.0/sigma.min.js"></script>
+  <!-- your app logic -->
+  <script src="genind.js" defer></script>
 </head>
 <body>
-    <header>
-        <h1>FYP</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About Me</a></li>
-                <li><a href="projects.html">Projects</a></li>
-                <li><a href="papers.html">Papers</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-    <div id="controls">
-        <button id="generate">Generate Topology</button>
-    </div>
-    <div id="container"></div>
-    <br>
-    <p>Rewrite of the <a href="https://doi.org/10.1016/j.aej.2023.07.062">GENIND</a> Topology generator in my CS Final Year Project as a JS demo page using Sigma.js.</p>
+<header>
+    <h1>GENIND</h1>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Me</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="papers.html">Papers</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+  <div id="controls">
+    <label>Network nodes: 
+      <input type="number" id="inpNetwork" value="10" min="1"/>
+    </label>
+    <label>Clusters: 
+      <input type="number" id="inpClusters" value="6" min="1"/>
+    </label>
+    <label>Nodes/cluster: 
+      <input type="number" id="inpPerCluster" value="5" min="1"/>
+    </label>
+    <button id="generate">Generate Topology</button>
+  </div>
 
-    <script>
-    let sigmaInstance;
-
-    function generateNetworkLayer(numNodes=7, type="ba") {
-        const g = new graphology.Graph();
-        const pos = {};
-        // create nodes & random pos
-        for (let i = 0; i < numNodes; i++) {
-        const id = `N${i}`;
-        g.addNode(id);
-        pos[id] = { x: Math.random(), y: Math.random() };
-        }
-        // BA
-        if (type === "ba") {
-        g.clear();
-        g.addNode("N0"); g.addNode("N1"); g.addEdge("N0","N1");
-        const weighted = ["N0","N1","N0","N1"];
-        for (let i = 2; i < numNodes; i++) {
-            const id = `N${i}`; g.addNode(id);
-            const targets = new Set();
-            while (targets.size < 2)
-            targets.add(weighted[Math.floor(Math.random()*weighted.length)]);
-            targets.forEach(t => g.addEdge(id, t));
-            for (let k=0; k<g.degree(id); k++) weighted.push(id);
-            targets.forEach(t => weighted.push(t));
-        }
-        }
-        // RG
-        else if (type === "rg") {
-        const r = 0.4;
-        const ids = g.nodes();
-        ids.forEach((a,i) => {
-            ids.slice(i+1).forEach(b => {
-            const dx = pos[a].x-pos[b].x, dy = pos[a].y-pos[b].y;
-            if (Math.hypot(dx,dy) < r) g.addEdge(a,b);
-            });
-        });
-        }
-        // Waxman
-        else if (type === "wm") {
-        const α=0.2, β=0.4, dmax=Math.SQRT2;
-        const ids = g.nodes();
-        ids.forEach((a,i) => {
-            ids.slice(i+1).forEach(b => {
-            const dx = pos[a].x-pos[b].x, dy = pos[a].y-pos[b].y;
-            const d = Math.hypot(dx,dy);
-            if (Math.random() < α*Math.exp(-d/(β*dmax))) g.addEdge(a,b);
-            });
-        });
-        }
-        return { graph: g, ids: g.nodes() };
-    }
-
-    function generateControllerLayer(clusters=4, per=3, type="ring") {
-        const g = new graphology.Graph();
-        const ids = [];
-        for (let i = 0; i < clusters; i++) {
-        const cluster = [];
-        for (let j = 0; j < per; j++) {
-            const id = `C${i}_${j}`; g.addNode(id); cluster.push(id); ids.push(id);
-        }
-        if (type==="mesh") {
-            cluster.slice(1).forEach(b=>g.addEdge(cluster[0],b));
-        } else if (type==="star") {
-            cluster.slice(1).forEach(b=>g.addEdge(cluster[0],b));
-        } else if (type==="ring") {
-            cluster.forEach((n,j)=>g.addEdge(n, cluster[(j+1)%cluster.length]));
-        } else if (type==="bus") {
-            cluster.slice(0,-1).forEach((n,j)=>g.addEdge(n, cluster[j+1]));
-        }
-        }
-        return { graph: g, ids };
-    }
-
-    function generateSensorLayer(clusters=4, per=3) {
-        const g = new graphology.Graph();
-        const ids = [];
-        for (let i = 0; i < clusters; i++) {
-        const cluster = [];
-        for (let j = 0; j < per; j++) {
-            const id = `S${i}_${j}`; g.addNode(id); cluster.push(id); ids.push(id);
-        }
-        cluster.slice(1).forEach(b=>g.addEdge(cluster[0],b));
-        }
-        return { graph: g, ids };
-    }
-
-    function combineGraph(base, netIds, ctrlIds, sensIds, clusters=5, fixed=3) {
-        const sortedNet = [...netIds].sort();
-        // controller → network
-        for (let i=0; i<clusters; i++) {
-        const ctr = ctrlIds.filter(n=>n.startsWith(`C${i}_`)).sort();
-        for (let j=0; j<fixed; j++) {
-            base.addEdge(ctr[j%ctr.length], sortedNet[(i+j)%sortedNet.length]);
-        }
-        }
-        // controller ↔ sensor
-        for (let i=0; i<clusters; i++) {
-        const c0 = ctrlIds.filter(n=>n.startsWith(`C${i}_`)).sort()[0];
-        const s0 = sensIds.filter(n=>n.startsWith(`S${i}_`)).sort()[0];
-        if (c0 && s0) base.addEdge(c0,s0);
-        }
-        return base;
-    }
-
-    function enforceMinDistance(G, minDist = 10, passes = 5) {
-        const nodes = G.nodes();
-        for (let pass = 0; pass < passes; pass++) {
-            for (let i = 0; i < nodes.length; i++) {
-            for (let j = i + 1; j < nodes.length; j++) {
-                const u = nodes[i], v = nodes[j];
-                const x1 = G.getNodeAttribute(u, "x"),
-                    y1 = G.getNodeAttribute(u, "y");
-                const x2 = G.getNodeAttribute(v, "x"),
-                    y2 = G.getNodeAttribute(v, "y");
-                let dx = x2 - x1, dy = y2 - y1;
-                let dist = Math.hypot(dx, dy);
-                if (dist > 0 && dist < minDist) {
-                // push each node half the overlap distance
-                const overlap = (minDist - dist) / 2;
-                dx /= dist; dy /= dist;
-                G.setNodeAttribute(u, "x", x1 - dx * overlap);
-                G.setNodeAttribute(u, "y", y1 - dy * overlap);
-                G.setNodeAttribute(v, "x", x2 + dx * overlap);
-                G.setNodeAttribute(v, "y", y2 + dy * overlap);
-                }
-            }
-            }
-        }
-    }
-
-
-    function initTopology() {
-        const container = document.getElementById("container");
-
-        // 1) Tear down previous Sigma (and its GL context)
-        if (sigmaInstance) {
-            sigmaInstance.kill();
-            container.innerHTML = "";
-        }
-
-        // 2) Generate the three layers
-        const net  = generateNetworkLayer(7,  "ba");
-        const ctrl = generateControllerLayer(5,4,"ring");
-        const sens = generateSensorLayer(5,4);
-
-        // 3) Merge them into a brand-new Graphology graph
-        const G = new graphology.Graph();
-        [net.graph, ctrl.graph, sens.graph].forEach(layer => {
-            // copy every node (with any pre-existing attrs, though none have x/y yet)
-            layer.forEachNode((node, attrs) => {
-            G.addNode(node, { ...attrs });
-            });
-            // copy every edge
-            layer.forEachEdge((edgeKey, attrs, source, target) => {
-            G.addEdge(source, target, { key: edgeKey, ...attrs });
-            });
-        });
-
-        // 4) Stitch controllers ↔ network and controllers ↔ sensors
-        combineGraph(G, net.ids, ctrl.ids, sens.ids, 5, 3);
-
-        // 5) Now assign a valid (numeric) x, y, size, color to *every* node
-        const entry  = [net.ids[0], net.ids[net.ids.length - 1]];
-        const target = [`S4_3`, `S3_3`];
-        const numClusters = 5;
-        const sliceAngle  = (2 * Math.PI) / numClusters;
-        const rNet  = 2.4,  rCtrl = 2.5,  rSens = 4.0;
-
-        G.forEachNode((n) => {
-            let radius, angle;
-
-            if (n.startsWith("N")) {
-            // core network — tight circle
-            radius = Math.random() * 0.5 * rNet;
-            angle  = Math.random() * 2 * Math.PI;
-            } else if (n.startsWith("C")) {
-            // controller clusters — middle ring
-            const i = +n.match(/^C(\d+)_/)[1];
-            angle  = i * sliceAngle + (Math.random() - 0.5) * sliceAngle * 0.4;
-            radius = rCtrl + (Math.random() - 0.5) * 1;
-            } else {
-            // sensor clusters — outer ring
-            const i = +n.match(/^S(\d+)_/)[1];
-            angle  = i * sliceAngle + (Math.random() - 0.5) * sliceAngle * 0.4;
-            radius = rSens + (Math.random() - 0.5) * 1;
-            }
-
-            // **here** we guarantee numeric x/y
-            G.setNodeAttribute(n, "x", radius * Math.cos(angle));
-            G.setNodeAttribute(n, "y", radius * Math.sin(angle));
-
-            // size & color
-            G.setNodeAttribute(n, "size", 10);
-            let c = "blue";
-            if (entry.includes(n))       c = "green";
-            else if (target.includes(n)) c = "purple";
-            else if (n.startsWith("C"))   c = "red";
-            else if (n.startsWith("S"))   c = "orange";
-            G.setNodeAttribute(n, "color", c);
-
-            // label (optional)
-            G.setNodeAttribute(n, "label", n);
-        });
-
-        // 6) Finally render
-        sigmaInstance = new Sigma(G, container);
-    }
-
-    document.getElementById("generate")
-        .addEventListener("click", initTopology);
-    </script>
+  <div id="container"></div>
+  <br>
+  <p>Rewrite of the <a href="https://doi.org/10.1016/j.aej.2023.07.062">GENIND</a> Topology generator in my CS Final Year Project as a JS demo page using Sigma.js.</p>
 </body>
 </html>
