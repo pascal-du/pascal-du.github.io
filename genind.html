@@ -7,7 +7,7 @@
   <style>
     #controls { margin: 1em; }
     #controls input { width: 4em; margin-right: 0.5em; }
-    #container { width: 800px; height: 600px; background: #252525; border: 1px solid #505050; }
+    #container { width: 800px; height: 600px; background: #757575; border: 1px solid #505050; }
   </style>
 
   <!-- core libs -->
@@ -32,13 +32,13 @@
 </header>
   <div id="controls">
     <label>Network nodes: 
-      <input type="number" id="inpNetwork" value="10" min="1"/>
+      <input type="number" id="inpNetwork" value="24" min="1"/>
     </label>
     <label>Clusters: 
-      <input type="number" id="inpClusters" value="6" min="1"/>
+      <input type="number" id="inpClusters" value="7" min="1"/>
     </label>
     <label>Nodes/cluster: 
-      <input type="number" id="inpPerCluster" value="5" min="1"/>
+      <input type="number" id="inpPerCluster" value="3" min="1"/>
     </label>
     <button id="generate">Generate Topology</button>
   </div>
