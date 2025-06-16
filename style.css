@@ -12,7 +12,7 @@ body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     color: #e0e0e0;                    /* Light text on dark background */
-    background-color: #121212;         /* Deep charcoal */
+    background-color: #000000;         /* Deep charcoal */
     max-width: 800px;
     margin: 0 auto;
     padding: 1rem;
@@ -88,6 +88,12 @@ header {
     align-items: center;
     padding-bottom: 1rem;
     border-bottom: 1px solid #333;     /* Slightly lighter than background */
+}
+
+.branding {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;    /* space between gif and heading */
 }
 
 header h1 {
