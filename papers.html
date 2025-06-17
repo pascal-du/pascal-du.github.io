@@ -25,19 +25,22 @@
 </head>
 <body>
     <header>
-        <h1>Misc. Papers I've Written</h1>
+        <!-- New wrapper for logo + title -->
+        <div class="branding">
+            <h1>Misc. Papers I've Written</h1>
+        </div>
+
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="projects.html">Projects</a></li>
-                <li><a href="papers.html">Papers</a></li>
-                <li><a href="contact.html">Contact</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="papers.html">Papers</a></li>
+            <li><a href="contact.html">Contact</a></li>
             </ul>
         </nav>
     </header>
 
     <section>
-        <!-- Example for article [1] -->
         <article class="card">
             <h3>
                 [<span class="counter"></span>] “Honeypot Allocation for Network Hardening in Industrial Control Systems”
@@ -64,7 +67,6 @@
             </p>
         </article>
 
-        <!-- Repeat the above structure for each article, changing the content accordingly -->
         <article class="card">
             <h3>
                 [<span class="counter"></span>] “Chest X-Ray Image Enhancement Using The LED Framework”
@@ -164,6 +166,25 @@
 
         <article class="card">
             <h3>
+                [<span class="counter"></span>] Lecture Notes for Weeks 7-10 
+                <em>Privacy Enhancing Technologies</em>, Jan 2025.
+            </h3>
+            <p>
+                <strong>ChatGPT overview:</strong> This document delivers concise revision notes on Privacy Enhancing Technologies, spanning weeks 7–10: it begins with 
+                <span class="hidden-content">
+                secure messaging—defining IND-CPA/CCA security, digital‐signature unforgeability, AEAD schemes, key‐derivation chains, and the Double Ratchet/Signal protocol’s privacy guarantees;
+                moves to private‐function evaluation, covering MLS’s TreeKEM group key management, ElGamal (and exponentiation) homomorphic properties, lattice problems, LWE-based encryption, and the foundations of leveled and fully homomorphic encryption;
+                and concludes with privacy-preserving machine learning—including CryptoNets and TFHE schemes for encrypted inference, differential‐privacy mechanisms and theorems, federated learning models (cross-device and cross-silo), and secure aggregation via masking, homomorphic encryption, and multiparty computation.
+                </span>
+                <button class="view-btn">View more...</button>
+            </p>
+            <p>
+                <a href="papers/PET_Notes.pdf" target="_blank">PDF</a>
+            </p>
+        </article>
+
+        <article class="card">
+            <h3>
                 [<span class="counter"></span>] “A Novel Approach to Optimising Convolutional Neural Networks based on the Ant Colony Optimiser”
                 <em>Computational Intelligence Coursework</em>, Dec 2024.
             </h3>
@@ -182,25 +203,6 @@
             </p>
             <p>
                 <a href="papers/COMP_INT_CW_redacted.pdf" target="_blank">PDF</a>
-            </p>
-        </article>
-
-        <article class="card">
-            <h3>
-                [<span class="counter"></span>] Lecture Notes for Weeks 7-10 
-                <em>Privacy Enhancing Technologies</em>, Jan 2025.
-            </h3>
-            <p>
-                <strong>ChatGPT overview:</strong> This document delivers concise revision notes on Privacy Enhancing Technologies, spanning weeks 7–10: it begins with 
-                <span class="hidden-content">
-                secure messaging—defining IND-CPA/CCA security, digital‐signature unforgeability, AEAD schemes, key‐derivation chains, and the Double Ratchet/Signal protocol’s privacy guarantees;
-                moves to private‐function evaluation, covering MLS’s TreeKEM group key management, ElGamal (and exponentiation) homomorphic properties, lattice problems, LWE-based encryption, and the foundations of leveled and fully homomorphic encryption;
-                and concludes with privacy-preserving machine learning—including CryptoNets and TFHE schemes for encrypted inference, differential‐privacy mechanisms and theorems, federated learning models (cross-device and cross-silo), and secure aggregation via masking, homomorphic encryption, and multiparty computation.
-                </span>
-                <button class="view-btn">View more...</button>
-            </p>
-            <p>
-                <a href="papers/PET_Notes.pdf" target="_blank">PDF</a>
             </p>
         </article>
     </section>
