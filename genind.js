@@ -337,6 +337,36 @@ function initTopology() {
   });
 }
 
+// after you’ve set up your hover handlers…
+sigmaInstance.on("clickNode", ({node}) => {
+  // copy‐and‐paste your enterNode body:
+  const using = new Set(nodeToPaths[node] || []);
+
+  G.forEachEdge((e, _, s, t) => {
+    const active = pathEdges.some((set, pi) => using.has(pi) && set.has(`${s}:::${t}`));
+    G.setEdgeAttribute(e, "color", active ? "#a47dab" : "#888");
+    G.setEdgeAttribute(e, "size",  active ? 3       : 1);
+  });
+
+  G.forEachNode(n => {
+    const active = (nodeToPaths[n] || []).some(pi => using.has(pi));
+    G.setNodeAttribute(n, "_highlighted", active);
+  });
+
+  sigmaInstance.refresh();
+});
+
+sigmaInstance.on("clickStage", () => {
+  // copy‐and‐paste your leaveNode body:
+  G.forEachEdge(e => {
+    G.setEdgeAttribute(e, "color", "#888");
+    G.setEdgeAttribute(e, "size", 1);
+  });
+  G.forEachNode(n => G.setNodeAttribute(n, "_highlighted", false));
+  sigmaInstance.refresh();
+});
+
+
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("generate").addEventListener("click", initTopology);
 });
