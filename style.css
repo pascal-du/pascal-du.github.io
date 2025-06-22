@@ -169,3 +169,49 @@ footer {
     text-align: center;
     color: #888888;                    /* Muted gray for footer text */
 }
+
+
+/* hide the toggle by default */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+@media (max-width: 600px) and (orientation: portrait) {
+  /* show the hamburger button */
+  .menu-toggle {
+    display: block;
+  }
+
+  /* collapse the nav by default */
+  nav {
+    max-height: 0;               /* completely hidden */
+    overflow: hidden;            /* clip contents */
+    transition:                   /* animate expansion/contraction */
+      max-height 0.35s ease-out;
+  }
+
+  /* when “nav-open” is toggled, let it expand */
+  header.nav-open nav {
+    max-height: 300px;           /* big enough for your list */
+  }
+
+  /* keep our centered, column list */
+  nav ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0; margin: 0;
+  }
+
+  nav a {
+    display: block;
+    width: 100%;
+  }
+}
+
+

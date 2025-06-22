@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Projects – Pascal U</title>
     <link rel="stylesheet" href="style.css" />
+    <script defer src="menu-toggle.js"></script>
 </head>
 <body>
     <header>
         <div class="branding">
             <h1>Personal Projects</h1>
         </div>
-
+        <button class="menu-toggle" aria-label="Toggle navigation">
+            ☰
+        </button>
         <nav>
             <ul>
             <li><a href="index.html">Home</a></li>
@@ -23,16 +26,20 @@
     </header>
 
     <section>
+
         <article class="card">
-            <h3>1. Industrial Topology Attack Path Visualiser</h3>
-            <p>
+            <div class="card-content">
+                <h3>1. Industrial Topology Attack Path Visualiser</h3>
+                <p>
                 Rewrite of the GENIND Topology generator in my CS Final Year Project as a JS demo page using Sigma.js,
-                Along with the core attack paths that exist between entry and target nodes (considering the existence of zero day exploits on every edge).
-            </p>
-            <p>
-                <a href="genind.html">Demo</a>
-            </p>
+                along with the core attack paths that exist between entry and target nodes
+                (considering the existence of zero-day exploits on every edge).
+                </p>
+                <p><a href="genind.html">Demo</a></p>
+            </div>
         </article>
+
+
         <!--
         <article class="card">
             <h3>2. Project 2</h3>
