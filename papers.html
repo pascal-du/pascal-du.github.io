@@ -110,8 +110,29 @@
 
         <article class="card">
             <h3>
+                [<span class="counter"></span>] Lecture Notes for Weeks 1-10 
+                <em>Ethical Hacking and Pentesting</em>, May 2025.
+            </h3>
+            <p>
+                <strong>ChatGPT overview:</strong> This review synthesizes core ethical‐hacking and penetration-testing topics: it begins with web security fundamentals 
+                <span class="hidden-content">
+                (HTTP, cookies, SQL injection, clickjacking), then examines common web-based attacks like CSRF and XSS;
+                it proceeds to system vulnerabilities including Shellshock, format-string exploits, buffer overflows, and associated shellcode techniques;
+                it covers low-level perspectives on C compilation, ELF binaries, assembly, the call stack, and binary analysis;
+                surveys malware classes (Trojans, viruses, worms, droppers, backdoors, botnets, ransomware, wipers, cryptominers);
+                and concludes with networking essentials (IP/UDP/TCP mechanics, ARP, firewalls, DNS spoofing/rebinding, and transport-layer attacks).
+                </span>
+                <button class="view-btn">View more...</button>
+            </p>
+            <p>
+                <a href="papers/ethical_hacking_review.pdf" target="_blank">PDF</a>
+            </p>
+        </article>
+
+        <article class="card">
+            <h3>
                 [<span class="counter"></span>] Part A: 
-                <em>Ethical Hacking and Pentesting Coursework</em>, May 2025.
+                <em>Ethical Hacking and Pentesting Coursework</em>, Apr 2025.
             </h3>
             <p>
                 This assignment is based on labs 2 and 3, which cover XSS, CSRF, and shellshock, three common vulnerabilities found in web applications.
@@ -128,7 +149,7 @@
         <article class="card">
             <h3>
                 [<span class="counter"></span>] Part B: 
-                <em>Ethical Hacking and Pentesting Coursework</em>, May 2025.
+                <em>Ethical Hacking and Pentesting Coursework</em>, Apr 2025.
             </h3>
             <p>
                 The objective of this coursework is to analyse an ELF binary using various inspection tools.
@@ -140,27 +161,6 @@
             </p>
             <p>
                 <a href="papers/ethical_hacking_b_redacted.pdf" target="_blank">PDF</a>
-            </p>
-        </article>
-
-        <article class="card">
-            <h3>
-                [<span class="counter"></span>] Lecture Notes for Weeks 1-10 
-                <em>Ethical Hacking and Pentesting</em>, May 2025.
-            </h3>
-            <p>
-                <strong>ChatGPT overview:</strong> This review synthesizes core ethical‐hacking and penetration-testing topics:
-                <span class="hidden-content">
-                it begins with web security fundamentals (HTTP, cookies, SQL injection, clickjacking), then examines common web-based attacks like CSRF and XSS;
-                it proceeds to system vulnerabilities including Shellshock, format-string exploits, buffer overflows, and associated shellcode techniques;
-                it covers low-level perspectives on C compilation, ELF binaries, assembly, the call stack, and binary analysis;
-                surveys malware classes (Trojans, viruses, worms, droppers, backdoors, botnets, ransomware, wipers, cryptominers);
-                and concludes with networking essentials (IP/UDP/TCP mechanics, ARP, firewalls, DNS spoofing/rebinding, and transport-layer attacks).
-                </span>
-                <button class="view-btn">View more...</button>
-            </p>
-            <p>
-                <a href="papers/ethical_hacking_review.pdf" target="_blank">PDF</a>
             </p>
         </article>
 
@@ -217,7 +217,7 @@
                 const hiddenContent = button.previousElementSibling;
                 if (hiddenContent.style.display === 'none' || hiddenContent.style.display === '') {
                     hiddenContent.style.display = 'inline';
-                    button.textContent = 'View less...';
+                    button.textContent = 'View less';
                 } else {
                     hiddenContent.style.display = 'none';
                     button.textContent = 'View more...';
