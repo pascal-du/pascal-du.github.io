@@ -176,36 +176,39 @@ function computeAllCorePaths(G, entry, target) {
 /** 3. Initialization & rendering **/
 function initTopology() {
   const container = document.getElementById("container");
+
+  // 1) Tear down any existing Sigma instance
   if (sigmaInstance) {
     sigmaInstance.kill();
     container.innerHTML = "";
   }
 
+  // 2) Read user inputs
   const numNetwork  = +document.getElementById("inpNetwork").value;
   const numClusters = +document.getElementById("inpClusters").value;
   const perCluster  = +document.getElementById("inpPerCluster").value;
 
-  // generate layers
-  const net  = generateNetworkLayer(numNetwork, "ba");
-  const ctrl = generateControllerLayer(numClusters, perCluster, "ring");
-  const sens = generateSensorLayer(numClusters, perCluster);
+  // 3) Generate each layer
+  const netLayer  = generateNetworkLayer(numNetwork, "ba");
+  const ctrlLayer = generateControllerLayer(numClusters, perCluster, "ring");
+  const sensLayer = generateSensorLayer(numClusters, perCluster);
 
-  // merge into single graph
+  // 4) Merge into a single Graphology graph G
   const G = new graphology.Graph();
-  [net.graph, ctrl.graph, sens.graph].forEach(layer => {
+  [netLayer.graph, ctrlLayer.graph, sensLayer.graph].forEach(layer => {
     layer.forEachNode((n, attrs) => G.addNode(n, { ...attrs }));
     layer.forEachEdge((e, attrs, s, t) => G.addEdge(s, t, { key: e, ...attrs }));
   });
-  combineGraph(G, net.ids, ctrl.ids, sens.ids, numClusters, perCluster - 1);
+  combineGraph(G, netLayer.ids, ctrlLayer.ids, sensLayer.ids, numClusters, perCluster - 1);
 
-  // entry & target definitions
-  const entry = [net.ids[0], net.ids[net.ids.length - 1]];
+  // 5) Define entry & target sets
+  const entry  = [netLayer.ids[0], netLayer.ids[netLayer.ids.length - 1]];
   const target = [
     `S${numClusters-1}_${perCluster-1}`,
     `S${numClusters-2}_${perCluster-1}`
   ];
 
-  // assign positions, colors, labels, highlight flags
+  // 6) Assign positions (concentric), base colors, labels & highlight flag
   const rNet  = 1, rCtrl = 2, rSens = 3;
   const slice = (2 * Math.PI) / numClusters;
   G.forEachNode(n => {
@@ -226,24 +229,25 @@ function initTopology() {
     G.setNodeAttribute(n, "y", radius * Math.sin(angle));
     G.setNodeAttribute(n, "size", 8);
 
+    // base color
     let color = "blue";
     if (entry.includes(n))       color = "green";
     else if (target.includes(n)) color = "purple";
-    else if (n.startsWith("C")) color = "red";
-    else if (n.startsWith("S")) color = "orange";
+    else if (n.startsWith("C"))  color = "red";
+    else if (n.startsWith("S"))  color = "orange";
     G.setNodeAttribute(n, "color", color);
 
     G.setNodeAttribute(n, "label", n);
     G.setNodeAttribute(n, "_highlighted", false);
   });
 
-  // default edge styling
+  // 7) Default edge styling
   G.forEachEdge((e, _, s, t) => {
     G.setEdgeAttribute(e, "color", "#888");
     G.setEdgeAttribute(e, "size", 1);
   });
 
-  // force‐directed layout for spacing
+  // 8) Run ForceAtlas2 for nicer spacing
   forceAtlas2.assign(G, {
     iterations: 200,
     scalingRatio: 10,
@@ -254,42 +258,39 @@ function initTopology() {
     barnesHutTheta: 1
   });
 
-  // compute core paths and lookup tables
-  const corePaths = computeAllCorePaths(G, entry, target);
+  // 9) Compute all induced core-paths & build lookup tables
+  const corePaths   = computeAllCorePaths(G, entry, target);
   const nodeToPaths = {};
   const pathEdges   = [];
   corePaths.forEach((path, pi) => {
     path.forEach(n => (nodeToPaths[n] ||= []).push(pi));
-    const set = new Set();
+    const edgeSet = new Set();
     for (let i = 0; i + 1 < path.length; i++) {
       const u = path[i], v = path[i+1];
-      set.add(`${u}:::${v}`);
-      set.add(`${v}:::${u}`);
+      edgeSet.add(`${u}:::${v}`);
+      edgeSet.add(`${v}:::${u}`);
     }
-    pathEdges.push(set);
+    pathEdges.push(edgeSet);
   });
 
-  // single Sigma instantiation with entry/target‐aware reducer
+  // 10) Instantiate Sigma once, with entry/target-aware reducer
   sigmaInstance = new Sigma(G, container, {
     nodeReducer: (nodeId, data) => {
       if (!G.getNodeAttribute(nodeId, "_highlighted")) return data;
-
-      let haloColor = "#ff746c"; // default
-      if (entry.includes(nodeId)) haloColor = "#4caf50";
-      else if (target.includes(nodeId)) haloColor = "#9c27b0";
-
-      return {
-        ...data,
-        color: haloColor,
-        size:  data.size * 1.4
-      };
+      let halo = "#ff746c";               // default halo
+      if (entry.includes(nodeId)) halo = "#4caf50";
+      else if (target.includes(nodeId)) halo = "#9c27b0";
+      return { ...data, color: halo, size: data.size * 1.4 };
     }
   });
 
-  // capture and animate from center
+  // 11) Capture final positions and animate from center
   const finalPos = {};
   G.forEachNode(n => {
-    finalPos[n] = { x: G.getNodeAttribute(n, "x"), y: G.getNodeAttribute(n, "y") };
+    finalPos[n] = {
+      x: G.getNodeAttribute(n, "x"),
+      y: G.getNodeAttribute(n, "y")
+    };
     G.setNodeAttribute(n, "x", 0);
     G.setNodeAttribute(n, "y", 0);
   });
@@ -297,7 +298,7 @@ function initTopology() {
 
   const duration = 600, start = performance.now();
   function animate(time) {
-    const t = Math.min((time - start) / duration, 1);
+    const t     = Math.min((time - start) / duration, 1);
     const eased = 1 - Math.pow(1 - t, 5);
     G.forEachNode(n => {
       const { x: fx, y: fy } = finalPos[n];
@@ -309,25 +310,48 @@ function initTopology() {
   }
   requestAnimationFrame(animate);
 
-  // hover handlers
+  // 12) Hover handlers (desktop)
   sigmaInstance.on("enterNode", ({ node }) => {
     const using = new Set(nodeToPaths[node] || []);
-
+    // highlight edges
     G.forEachEdge((e, _, s, t) => {
       const active = pathEdges.some((set, pi) => using.has(pi) && set.has(`${s}:::${t}`));
       G.setEdgeAttribute(e, "color", active ? "#a47dab" : "#888");
-      G.setEdgeAttribute(e, "size",  active ? 3 : 1);
+      G.setEdgeAttribute(e, "size",  active ? 3     : 1);
     });
-
+    // highlight nodes
     G.forEachNode(n => {
       const active = (nodeToPaths[n] || []).some(pi => using.has(pi));
       G.setNodeAttribute(n, "_highlighted", active);
     });
-
+    sigmaInstance.refresh();
+  });
+  sigmaInstance.on("leaveNode", () => {
+    G.forEachEdge(e => {
+      G.setEdgeAttribute(e, "color", "#888");
+      G.setEdgeAttribute(e, "size", 1);
+    });
+    G.forEachNode(n => G.setNodeAttribute(n, "_highlighted", false));
     sigmaInstance.refresh();
   });
 
-  sigmaInstance.on("leaveNode", () => {
+  // 13) Tap handlers (mobile & click)
+  sigmaInstance.on("clickNode", ({ node }) => {
+    // same as enterNode
+    const using = new Set(nodeToPaths[node] || []);
+    G.forEachEdge((e, _, s, t) => {
+      const active = pathEdges.some((set, pi) => using.has(pi) && set.has(`${s}:::${t}`));
+      G.setEdgeAttribute(e, "color", active ? "#a47dab" : "#888");
+      G.setEdgeAttribute(e, "size",  active ? 3     : 1);
+    });
+    G.forEachNode(n => {
+      const active = (nodeToPaths[n] || []).some(pi => using.has(pi));
+      G.setNodeAttribute(n, "_highlighted", active);
+    });
+    sigmaInstance.refresh();
+  });
+  sigmaInstance.on("clickStage", () => {
+    // same as leaveNode
     G.forEachEdge(e => {
       G.setEdgeAttribute(e, "color", "#888");
       G.setEdgeAttribute(e, "size", 1);
@@ -337,34 +361,12 @@ function initTopology() {
   });
 }
 
-// after you’ve set up your hover handlers…
-sigmaInstance.on("clickNode", ({node}) => {
-  // copy‐and‐paste your enterNode body:
-  const using = new Set(nodeToPaths[node] || []);
-
-  G.forEachEdge((e, _, s, t) => {
-    const active = pathEdges.some((set, pi) => using.has(pi) && set.has(`${s}:::${t}`));
-    G.setEdgeAttribute(e, "color", active ? "#a47dab" : "#888");
-    G.setEdgeAttribute(e, "size",  active ? 3       : 1);
-  });
-
-  G.forEachNode(n => {
-    const active = (nodeToPaths[n] || []).some(pi => using.has(pi));
-    G.setNodeAttribute(n, "_highlighted", active);
-  });
-
-  sigmaInstance.refresh();
+// wire up the button
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("generate").addEventListener("click", initTopology);
 });
 
-sigmaInstance.on("clickStage", () => {
-  // copy‐and‐paste your leaveNode body:
-  G.forEachEdge(e => {
-    G.setEdgeAttribute(e, "color", "#888");
-    G.setEdgeAttribute(e, "size", 1);
-  });
-  G.forEachNode(n => G.setNodeAttribute(n, "_highlighted", false));
-  sigmaInstance.refresh();
-});
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
