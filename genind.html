@@ -51,7 +51,7 @@
 <body>
 <header>
     <div class="branding">
-        <h1>ICS Topology Generator</h1>
+        <h1>ICS Topology Attack Path Visualiser</h1>
     </div>
 
     <nav>
@@ -79,10 +79,16 @@
   <div id="container"></div>
   <br>
   <p>
-    Rewrite of the <a href="https://doi.org/10.1016/j.aej.2023.07.062">GENIND</a> Topology generator in my CS Final Year Project as a JS demo page using Sigma.js.
+    - Rewrite of the <a href="https://doi.org/10.1016/j.aej.2023.07.062">GENIND Topology generator</a> in my CS Final Year Project as a demo page using Sigma.js.
   </p>
   <p>
-    Hovering over nodes that exist between the <a href="https://doi.org/10.23919/CNSM.2017.8256038">CAGs</a> of entry and target nodes will highlight the attack paths that exist on those nodes.
+    - Hovering over nodes will reveal the attack paths that exist on the selected node between the entry and target nodes.
+  </p>
+  <p>
+    - Conceptually, all nodes may be visited by an attacker when conducting an attack, therefore <a href="https://doi.org/10.23919/CNSM.2017.8256038">CAGs</a> are used to compact the whole set of paths to a smaller set that may be used by the attacker.
+  </p>
+  <p>
+  <em>(Note; the contents of this demo page have been written after submitting my project and is not part of my original <a href="papers/FYP_REPORT_redacted.pdf">dissertation</a>.)</em>
   </p>
 </body>
 </html>
