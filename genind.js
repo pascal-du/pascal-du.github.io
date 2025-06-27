@@ -1,4 +1,5 @@
 let sigmaInstance;
+let hasShownInputRecommendation = false;
 
 /** 1. Topology generators **/
 function generateNetworkLayer(numNodes = 7, type = "ba") {
@@ -363,12 +364,20 @@ function initTopology() {
 
 // wire up the button
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("generate").addEventListener("click", initTopology);
-});
-
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("generate").addEventListener("click", initTopology);
+  document.getElementById("generate").addEventListener("click", (e) => {
+    const numNetwork  = +document.getElementById("inpNetwork").value;
+    const numClusters = +document.getElementById("inpClusters").value;
+    const perCluster  = +document.getElementById("inpPerCluster").value;
+    if (
+      !hasShownInputRecommendation && (
+        numNetwork < 2 || numNetwork > 100 ||
+        numClusters < 2 || numClusters > 15 ||
+        perCluster < 2 || perCluster > 8
+      )
+    ) {
+      alert("Recommended values:\n- Network nodes: 2-100\n- Clusters: 2-15\n- Nodes/cluster: 2-8\n\nYou may use other values, but results may be unpredictable.");
+      hasShownInputRecommendation = true;
+    }
+    initTopology();
+  });
 });
