@@ -369,7 +369,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const numClusters = +document.getElementById("inpClusters").value;
     const perCluster  = +document.getElementById("inpPerCluster").value;
     if (
-      !hasShownInputRecommendation && (
+      !hasShownInputRecommendation && 
+      (
         numNetwork < 2 || numNetwork > 100 ||
         numClusters < 2 || numClusters > 15 ||
         perCluster < 2 || perCluster > 8
