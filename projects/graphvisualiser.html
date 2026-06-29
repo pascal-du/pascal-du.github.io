@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>graph visualiser</title>
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    :root {
+      --panel: #151515;
+      --panel-2: #1e1e1e;
+      --line: #333;
+      --muted: #a8a8a8;
+      --entry: #39d98a;
+      --exit: #ff7b72;
+      --path: #ffd166;
+      --node: #7aa2ff;
+    }
+
+    main {
+      margin-top: 1rem;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      background: #242424;
+      color: #fff;
+      border: 1px solid #4a4a4a;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 0.45rem 0.65rem;
+    }
+
+    button:hover,
+    button.active {
+      background: #333;
+      border-color: #777;
+    }
+
+    input,
+    select,
+    textarea {
+      background: #080808;
+      color: #e0e0e0;
+      border: 1px solid #3a3a3a;
+      border-radius: 4px;
+      padding: 0.4rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 10rem;
+      resize: vertical;
+      white-space: pre;
+      overflow-wrap: normal;
+      overflow-x: auto;
+    }
+
+    #controls {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.6rem;
+      margin-bottom: 0.75rem;
+    }
+
+    #controls label {
+      display: grid;
+      gap: 0.2rem;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    #controls input {
+      width: 100%;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    #container {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      min-height: 320px;
+      background: #0d0d0d;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      margin: 0 auto 0.75rem;
+      cursor: grab;
+    }
+
+    #container.dragging {
+      cursor: grabbing;
+    }
+
+    .status-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 0.55rem;
+      min-width: 0;
+    }
+
+    .stat b {
+      display: block;
+      color: #fff;
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 0.72rem;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      align-items: start;
+    }
+
+    .editor-panel,
+    .paths-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 0.75rem;
+    }
+
+    .editor-panel h2,
+    .paths-panel h2 {
+      margin-top: 0;
+      font-size: 0.95rem;
+    }
+
+    .editor-panel label {
+      display: block;
+      color: var(--muted);
+      font-size: 0.75rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .editor-panel + .editor-panel {
+      margin-top: 0.75rem;
+    }
+
+    #message {
+      min-height: 1.5rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    #message.error {
+      color: #ffb4ab;
+    }
+
+    #paths {
+      max-height: 22rem;
+      overflow: auto;
+      color: #d6d6d6;
+      font-size: 0.78rem;
+    }
+
+    .path-item {
+      border-top: 1px solid #2a2a2a;
+      padding: 0.45rem 0;
+    }
+
+    .path-item:first-child {
+      border-top: 0;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .swatch {
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    @media (max-width: 760px) {
+      #controls,
+      .status-row,
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      #container {
+        min-height: 260px;
+      }
+    }
+  </style>
+  <script defer src="../menu-toggle.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/graphology/0.25.4/graphology.umd.min.js"></script>
+  <script src="./libs/graphology-layout-forceatlas2.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/2.4.0/sigma.min.js"></script>
+  <script defer src="graphvisualiser.js"></script>
+  <link rel="icon" href="../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header>
+    <div class="branding">
+        <h1>graph visualiser</h1>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+        ☰
+    </button>
+    <nav>
+        <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../projects.html">Projects</a></li>
+        <li><a href="../papers.html">Papers</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+  <section id="controls" aria-label="Graph controls">
+    <label>
+      Nodes
+      <input type="number" id="nodeCount" value="24" min="2" max="150">
+    </label>
+    <label>
+      Edges per new node
+      <input type="number" id="attachCount" value="2" min="1" max="12">
+    </label>
+    <label>
+      Seed clique
+      <input type="number" id="seedCount" value="3" min="2" max="20">
+    </label>
+    <label>
+      Click action
+      <select id="clickRole">
+        <option value="cycle">Cycle role</option>
+        <option value="entry">Set entry</option>
+        <option value="exit">Set exit</option>
+        <option value="normal">Clear role</option>
+      </select>
+    </label>
+  </section>
+
+  <div class="button-row">
+    <button id="generate">Generate</button>
+    <button id="editMode" aria-pressed="false">click off</button>
+    <button id="calculate">Calculate paths</button>
+    <button id="clearPaths">Clear</button>
+  </div>
+
+  <div class="legend" aria-label="Legend">
+    <span><i class="swatch" style="background: var(--node)"></i>normal</span>
+    <span><i class="swatch" style="background: var(--entry)"></i>entry</span>
+    <span><i class="swatch" style="background: var(--exit)"></i>exit</span>
+    <span><i class="swatch" style="background: var(--path)"></i>shortest path</span>
+  </div>
+
+  <div id="container"></div>
+
+  <div class="status-row">
+    <div class="stat"><b id="nodeTotal">0</b><span>nodes</span></div>
+    <div class="stat"><b id="edgeTotal">0</b><span>edges</span></div>
+    <div class="stat"><b id="entryTotal">0</b><span>entries</span></div>
+    <div class="stat"><b id="exitTotal">0</b><span>exits</span></div>
+  </div>
+
+  <div id="message" role="status"></div>
+
+  <div class="workspace">
+    <div>
+      <div class="editor-panel">
+        <h2>Nodes</h2>
+        <label for="nodeEditor">One node per line: id,type where type is normal, entry, or exit.</label>
+        <textarea id="nodeEditor" spellcheck="false"></textarea>
+      </div>
+      <div class="editor-panel">
+        <h2>Edges</h2>
+        <label for="edgeEditor">One undirected edge per line: source,target.</label>
+        <textarea id="edgeEditor" spellcheck="false"></textarea>
+      </div>
+    </div>
+
+    <div class="paths-panel">
+      <h2>Shortest paths</h2>
+      <div id="paths"></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  &copy; 2025 Pascal U. All rights reserved.
+</footer>
+</body>
+</html>
