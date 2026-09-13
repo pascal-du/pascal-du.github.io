@@ -64,6 +64,11 @@ button {
     padding: 0.25rem 0;
 }
 
+button,
+.social-button {
+    background-color: rgba(30, 30, 30, 0.75);
+}
+
 @media (max-width: 400px) {
     body {
         padding: 0.75rem;
@@ -145,9 +150,36 @@ a:hover {
     text-decoration: underline;
 }
 
+.social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.social-button {
+    padding: 0.45rem 0.9rem;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background-color: rgba(30, 30, 30, 0.75);
+    font-size: 0.9rem;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.social-button:hover {
+    border-color: #888;
+    background-color: rgba(48, 48, 48, 0.75);
+    text-decoration: none;
+}
+
+.social-button:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
 /* Project and paper listings */
 .card {
-    background-color: #1e1e1e;         /* Darker grayish background for cards */
+    background-color: rgba(30, 30, 30, 0.75); /* Translucent card background */
     border: 1px solid #333;            /* Subtle border to delineate cards */
     padding: 1rem;
     margin-bottom: 1rem;
