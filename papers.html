@@ -46,6 +46,38 @@
     <section>
         <article class="card">
             <h3>
+                [<span class="counter"></span>] “Towards Scalable Android Malware Detection Through Function Call Graph Pruning”
+                <em>MSc Dissertation</em>, Sept 2026.
+            </h3>
+            <p><strong>Authors:</strong> Pascal U</p>
+            <p>
+                <strong>Abstract:</strong> Function call graph representations of Android applications can become
+
+                <span class="hidden-content">
+                    computationally expensive to operate on by graph neural networks (GNNs) to process as programs contain increasing numbers of functions and function invocations.
+                    Graph pruning offers one avenue for reducing this complexity by removing large portions of the graph.
+                    However, the effects on detection performance, scalability, sensitivity to graph size and quality of explanation remain underexplored topics.
+                    This dissertation evaluates whether graph pruning can provide a practical basis for scalable Android malware detection while preserving predictive performance.
+                    <br><br>
+                    Two pruning methods are considered; sensitive function call graph pruning (sFCG) and Leaf Pruning (LP). They are evaluated against unpruned FCGs using two GNN architectures: GCN and GraphSAGE.
+                    This study makes use of a temporally ordered subset of the Hypercube dataset under spatio-temporal constraints laid out by <span class="smallcaps">Tesseract</span>.
+                    We propose the use of a node embedding structure combining opcode2vec embeddings, FastText-based API embeddings, and one-hot permission features as an extensive node enrichment technique.
+                    Evaluation considers a suite of metrics including malware F1, Area Under Time (AUT), size-stratified harmonic score and fidelity characterisation, along with training time and graph size reduction rates.
+                    <br><br>
+                    The results demonstrate that graph pruning does not induce a uniform improvement in detection performance, but is rather a trade-off between scalability, performance and explainability.
+                    sFCG is found to reduce computational cost by decreasing average epoch training time from 1771 to 586 seconds for GCN and 1675 to 574 seconds for GraphSAGE, though neither pruning method improves upon the unpruned baseline malware F1 scores.
+                    Further, our results show no convincing evidence that pruning becomes increasingly beneficial as original FCG size grows.
+                    However, we find a substantial effect of pruning on explanation faithfulness under GNNExplainer, with the GCN -- sFCG pairing achieving a characterisation score of 76.4% at K= 1,000 explanation edges, compared to the baseline GCN -- unpruned pairing achieving 15.8%.
+                    These findings show that graph pruning should not be treated as a lossless preprocessing step, but rather as a balancing choice between scalability, predictive performance, and explanation faithfulness.
+                </span>
+                <button class="view-btn">View more...</button>
+            </p>
+            <p>
+                <a href="papers/dissertation.pdf" target="_blank">PDF</a>
+            </p>
+        </article>
+        <article class="card">
+            <h3>
                 [<span class="counter"></span>] “Methods in Learning Graph Representations of Programs for Malware Detection”
                 <em>Research Literature Review</em>, Apr 2025.
             </h3>
@@ -61,10 +93,10 @@
                     Though this review is particularly focused on GNN-based GRL pipelines, many of the challenges are also relevant for shallow embedding-based pipelines, and are thus discussed in some detail to highlight advantages of GNN-based pipelines.
                     Namely, their end-to-end optimisation of learned representations, allow patterns to be learned directly through the loss function of the model.
                     Further, shallow embeddings have no direct mechanism to implement explainable AI evaluators such as GNNExplainer.
-                    
+                    <br><br>
                     This review walks through the entire GRL pipeline for identifying and analysing malware, from binary disassembly, code transformation and graph pre-processing, methods of graph representation in learned vector embeddings, and finally a brief discussion of classification techniques and explainability.
                     The final main part of this review discusses challenges in the domain and potential avenues for future work.
-                    Further, the Tesseract framework is invoked to discuss challenges with spatio-temporal bias and concept drift, where the vast majority of papers surveyed, did not meet the constraints laid out by the framework.
+                    Further, the <span class="smallcaps">Tesseract</span> framework is invoked to discuss challenges with spatio-temporal bias and concept drift, where the vast majority of papers surveyed, did not meet the constraints laid out by the framework.
                     As graph-based classifiers remain preeminent, they are increasingly susceptible to sophisticated problem-space adversarial attacks, malicious actors find creative ways of perturbing underlying graph structures while preserving executable functionality, thereby demanding the need for evaluation of model robustness in future classifier designs.
                 </span>
                 <button class="view-btn">View more...</button>
