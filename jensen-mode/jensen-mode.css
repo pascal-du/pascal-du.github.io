@@ -15,11 +15,13 @@
         left: 0;
         top: 0;
         will-change: transform;
-        pointer-events: none;
+        pointer-events: auto;
+        cursor: pointer;
         filter: drop-shadow(0 8px 5px rgba(0, 0, 0, .28));
       }
 
       #jensen-sprite {
+        pointer-events: none;
         position: absolute;
         left: 0;
         top: 0;

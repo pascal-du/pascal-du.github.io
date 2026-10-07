@@ -118,8 +118,7 @@ body.jensen-battling { cursor: crosshair; }
 #jensen-battle-shoot { display: none; }
 body.jensen-battling #jensen-battle-shoot { display: block; background: #654594; }
 body.jensen-battling #jensen-touch { width: min(372px, calc(100vw - 24px)); }
-body.jensen-battling #jensen-touch [data-jensen-tap="emote"],
-body.jensen-battling #jensen-touch [data-jensen-tap="pound"] { display: none; }
+body.jensen-battling #jensen-touch [data-jensen-tap="emote"] { display: none; }
 body.jensen-battling #jensen-help { display: none; }
 body.jensen-battling :is(a, button)[aria-disabled="true"] {
   opacity: .35;

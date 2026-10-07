@@ -347,7 +347,7 @@ window.createJensenBossBattle = ({ state, keys, player, scoreText, resetPosition
   document.addEventListener('pointerdown', event => {
     trackAim(event);
     if (!active || finished || event.button !== 0) return;
-    if (event.target?.closest?.('a, button, input, textarea, select, form')) return;
+    if (event.target?.closest?.('#jensen-player, a, button, input, textarea, select, form')) return;
     event.preventDefault();
     pendingShots++;
   });

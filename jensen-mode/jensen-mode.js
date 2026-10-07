@@ -216,6 +216,8 @@
       addEventListener('keyup', e => keys.delete(e.code));
       addEventListener('blur', () => keys.clear());
       resetBtn.addEventListener('click', resetPosition);
+      player.setAttribute('title', 'Click Jensen to emote');
+      player.addEventListener('click', () => queueAction('emote'));
 
       if (touch) {
         touch.querySelectorAll('[data-jensen-key]').forEach(btn => {
@@ -349,7 +351,7 @@
       }
 
       function updateSpeech() {
-        if (battle?.active) {
+        if (battle?.active && state.emoteTimer <= 0) {
           speech.hidden = true;
           return;
         }

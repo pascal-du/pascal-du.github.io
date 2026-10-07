@@ -173,6 +173,29 @@ test('clicking the GIF confirms before entering; cancellation preserves normal m
   assert.equal(game.elements['jensen-score'].textContent, '1 platforms');
 });
 
+test('clicking Jensen cycles emotes, including in battle, without firing a laser', () => {
+  const game = createGame();
+  game.click('jensen-player');
+  const firstLine = game.elements['jensen-speech'].textContent;
+  assert.equal(game.elements['jensen-speech'].hidden, false);
+  assert.equal(game.actor.state.emoteIndex, 0);
+  game.click('jensen-player');
+  assert.equal(game.actor.state.emoteIndex, 1);
+  assert.notEqual(game.elements['jensen-speech'].textContent, firstLine);
+  game.click('jensen-boss-trigger');
+  game.step(100);
+  const player = game.elements['jensen-player'];
+  player.closest = selector => selector.includes('#jensen-player') ? player : null;
+  game.sandbox.document.dispatch('pointerdown', {
+    button: 0, target: player, pointerType: 'mouse', clientX: 200, clientY: 300
+  });
+  game.click('jensen-player');
+  game.step(1);
+  assert.equal(game.elements['jensen-speech'].hidden, false);
+  assert.ok(game.actor.state.emoteTimer > 0);
+  assert.equal(game.beams.length, 0);
+});
+
 test('the GIF enlarges and moves while Jensen stays on the existing portfolio card', () => {
   const game = createGame();
   game.click('jensen-boss-trigger');
