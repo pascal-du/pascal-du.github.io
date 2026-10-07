@@ -34,7 +34,7 @@
   let animationFrame;
   let particles = [];
 
-  const PARTICLE_DENSITY_DIVISOR = 9000;
+  const PARTICLE_DENSITY_DIVISOR = 20000;
   const MAX_DISTANCE = 130;
   const MOUSE_RADIUS = 150;
   const MOUSE_REPULSION_FORCE = 0.08;
