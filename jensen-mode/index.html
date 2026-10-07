@@ -10,13 +10,17 @@
     <link rel="icon" href="../favicon.ico" type="image/x-icon">
 
     <link rel="stylesheet" href="jensen-mode.css" />
+    <link rel="stylesheet" href="boss-battle.css" />
 
+    <script defer src="boss-battle.js"></script>
     <script defer src="jensen-mode.js"></script>
 </head>
 <body>
     <header>
         <div class="branding">
-            <img src="../me.gif" alt="rotating head" width="38" height="38">
+            <button id="jensen-boss-trigger" type="button" aria-label="Challenge Pascal to a boss battle" aria-controls="jensen-boss-battle" aria-expanded="false" title="Click to summon the boss">
+                <img src="../me-transparent.gif" alt="rotating head" width="38" height="38">
+            </button>
             <h1>Pascal U</h1>
         </div>
         <button class="menu-toggle" aria-label="Toggle navigation">
@@ -98,6 +102,30 @@
         &copy; 2025 Pascal U. All rights reserved.
     </footer>
 
+    <div id="jensen-boss-battle" role="region" aria-label="Pascal boss battle" hidden>
+      <canvas id="jensen-battle-canvas" aria-hidden="true"></canvas>
+      <img id="jensen-boss-image" src="../me-transparent.gif" alt="" draggable="false">
+      <div class="jensen-battle-hud">
+        <div class="jensen-battle-heading">
+          <strong>PASCAL // THE ROTATING MENACE</strong>
+          <button id="jensen-battle-exit" type="button">Leave <span>Esc</span></button>
+        </div>
+        <div class="jensen-battle-health-label"><span id="jensen-boss-phase">Phase I · Awakened</span><span id="jensen-boss-health-text">1000 / 1000</span></div>
+        <progress id="jensen-boss-health" max="1000" value="1000" aria-label="Pascal health"></progress>
+        <div class="jensen-battle-health-label"><span>Jensen</span><span id="jensen-battle-player-health-text">100 / 100</span></div>
+        <progress id="jensen-battle-player-health" max="100" value="100" aria-label="Jensen health"></progress>
+        <p class="jensen-battle-keyboard-help">A/D move · Space jump · Shift dash · Aim with cursor · Tap F or click for one shot</p>
+        <p class="jensen-battle-touch-help">Tap the page to aim + shoot · Move + jump to dodge · Tap ◎ for one shot</p>
+      </div>
+      <div id="jensen-battle-announcement" role="status" aria-live="polite"></div>
+      <div id="jensen-battle-result" hidden>
+        <h2 id="jensen-battle-result-title"></h2>
+        <p id="jensen-battle-result-description"></p>
+        <button id="jensen-battle-retry" type="button">Fight again</button>
+        <button id="jensen-battle-return" type="button">Back to portfolio</button>
+      </div>
+    </div>
+
     <div id="jensen-game-layer" aria-hidden="true">
       <div id="jensen-player">
         <div id="jensen-sprite"></div>
@@ -124,6 +152,7 @@
       <button type="button" data-jensen-tap="pound" aria-label="Drop through platform or fall faster" title="Fall / drop through">↓</button>
       <button type="button" data-jensen-tap="dash" aria-label="Dash">⚡</button>
       <button type="button" data-jensen-tap="emote" aria-label="Emote">☺</button>
+      <button id="jensen-battle-shoot" type="button" data-jensen-tap="shoot" aria-label="Tap to shoot the boss">◎</button>
     </div>
 
 </body>

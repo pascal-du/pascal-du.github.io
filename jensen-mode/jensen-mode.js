@@ -53,6 +53,7 @@
         emoteIndex: -1,
         emoteTimer: 0
       };
+      const battle = window.createJensenBossBattle?.({ state, keys, player, scoreText, resetPosition, width: PW });
 
       function measurePlatforms() {
         return platforms.map(el => {
@@ -69,6 +70,7 @@
       }
 
       function measurePortals() {
+        if (battle?.active) return [];
         return portals.map(el => {
           const rect = el.getBoundingClientRect();
           const nav = el.closest('nav').getBoundingClientRect();
@@ -170,11 +172,12 @@
       }
 
       function queueAction(action) {
-        if (portalPromptOpen) return;
+        if (portalPromptOpen || battle?.finished) return;
         if (action === 'jump') state.jumpQueued = true;
         if (action === 'dash') state.dashQueued = true;
         if (action === 'pound') state.poundQueued = true;
         if (action === 'emote') startEmote();
+        if (action === 'shoot') battle?.shoot();
       }
 
       function startEmote() {
@@ -189,6 +192,17 @@
         const tag = e.target && e.target.tagName;
         if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.target?.isContentEditable) return;
         const code = e.code;
+        if (battle?.active && code === 'Escape') {
+          e.preventDefault();
+          battle.stop();
+          return;
+        }
+        if (battle?.finished) return;
+        if (battle?.active && code === 'KeyF' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+          e.preventDefault();
+          if (!e.repeat) battle.shoot();
+          return;
+        }
         if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'Space'].includes(code)) e.preventDefault();
         keys.add(code);
         if (!e.repeat && ['Space', 'ArrowUp', 'KeyW'].includes(code)) queueAction('jump');
@@ -226,6 +240,7 @@
 
       function simulate(dt) {
         if (portalPromptOpen) return;
+        if (battle?.finished) return;
         const previous = { x: state.x, y: state.y };
         state.emoteTimer = Math.max(0, state.emoteTimer - dt);
         const surfaces = measurePlatforms();
@@ -334,6 +349,10 @@
       }
 
       function updateSpeech() {
+        if (battle?.active) {
+          speech.hidden = true;
+          return;
+        }
         const line = state.emoteTimer > 0 ? EMOTES[state.emoteIndex].line
           : (state.grounded && state.support ? state.support.getAttribute('data-jensen-speech') : null);
         speech.hidden = !line;
@@ -406,6 +425,7 @@
         const dt = Math.min(2.2, Math.max(.25, (now - lastTime) / 16.6667));
         lastTime = now;
         simulate(dt);
+        battle?.update(dt);
         render(dt);
         requestAnimationFrame(tick);
       }

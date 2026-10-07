@@ -1,0 +1,138 @@
+#jensen-boss-trigger {
+  display: inline-flex;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+#jensen-boss-trigger img { width: 38px; height: 38px; }
+#jensen-boss-trigger:hover { filter: drop-shadow(0 0 7px #ba95ff); }
+#jensen-boss-trigger:focus-visible { outline: 2px dashed #ffd477; outline-offset: 5px; }
+body.jensen-battling { cursor: crosshair; }
+
+#jensen-boss-battle {
+  position: fixed;
+  inset: 0;
+  z-index: 2147482999;
+  overflow: hidden;
+  pointer-events: none;
+  color: #f4e8cf;
+  font: 12px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+#jensen-boss-battle[hidden], #jensen-battle-result[hidden] { display: none; }
+#jensen-battle-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+#jensen-boss-image {
+  position: absolute;
+  left: 0;
+  top: 0;
+  max-width: none;
+  object-fit: contain;
+  pointer-events: none;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 18px #945bff);
+  will-change: transform, width, height;
+}
+#jensen-boss-image.enraged { filter: drop-shadow(0 0 22px #ff536d); }
+#jensen-boss-image.charging { filter: brightness(1.7) drop-shadow(0 0 26px #ffd477); }
+#jensen-boss-image.hit { opacity: .55; }
+#jensen-player.jensen-invulnerable { opacity: .45; }
+
+.jensen-battle-hud {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: min(440px, calc(100% - 24px));
+  pointer-events: auto;
+  padding: 10px 14px;
+  border: 3px solid #aa8557;
+  background: #161326;
+  box-shadow: 4px 4px 0 #000, inset 0 0 0 2px #38283c;
+}
+.jensen-battle-heading, .jensen-battle-health-label { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.jensen-battle-heading strong { font-size: 12px; letter-spacing: .05em; }
+.jensen-battle-health-label { font-size: 10px; margin-top: 5px; }
+#jensen-boss-battle progress {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 12px;
+  border: 2px solid #0a0812;
+  background: #352237;
+}
+#jensen-boss-battle progress::-webkit-progress-bar { background: #352237; }
+#jensen-boss-health::-webkit-progress-value { background: #ed587b; }
+#jensen-boss-health::-moz-progress-bar { background: #ed587b; }
+#jensen-battle-player-health::-webkit-progress-value { background: #72f0b2; }
+#jensen-battle-player-health::-moz-progress-bar { background: #72f0b2; }
+#jensen-boss-battle button {
+  border: 2px solid #aa8557;
+  border-radius: 0;
+  padding: 5px 9px;
+  background: #30243b;
+  color: #ffdf9a;
+  font: inherit;
+  cursor: pointer;
+}
+#jensen-boss-battle button:hover { background: #49344e; }
+#jensen-boss-battle button:focus-visible { outline: 2px dashed #fff; outline-offset: 3px; }
+#jensen-battle-exit { white-space: nowrap; }
+#jensen-battle-exit span { opacity: .6; }
+.jensen-battle-keyboard-help, .jensen-battle-touch-help { margin-top: 7px; font-size: 10px; color: #bfaccd; }
+.jensen-battle-touch-help { display: none; }
+#jensen-battle-announcement {
+  position: absolute;
+  top: 165px;
+  left: 12px;
+  right: 12px;
+  color: #ffd477;
+  text-align: center;
+  font-size: clamp(13px, 2.5vw, 22px);
+  font-weight: 700;
+  text-shadow: 2px 2px #000;
+  width: fit-content;
+  margin: auto;
+  padding: 4px 12px;
+  background: #171326e6;
+  pointer-events: none;
+}
+#jensen-battle-announcement:empty { display: none; }
+#jensen-battle-result {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(400px, calc(100% - 32px));
+  padding: 24px;
+  border: 4px solid #aa8557;
+  background: #171326;
+  box-shadow: 6px 6px #000;
+  text-align: center;
+  pointer-events: auto;
+}
+#jensen-battle-result h2 { color: #ffd477; margin: 0 0 10px; font-size: 22px; }
+#jensen-battle-result p { margin-bottom: 16px; font-size: 12px; }
+#jensen-battle-result button { margin: 4px; }
+#jensen-battle-shoot { display: none; }
+body.jensen-battling #jensen-battle-shoot { display: block; background: #654594; }
+body.jensen-battling #jensen-touch { width: min(372px, calc(100vw - 24px)); }
+body.jensen-battling #jensen-touch [data-jensen-tap="emote"],
+body.jensen-battling #jensen-touch [data-jensen-tap="pound"] { display: none; }
+body.jensen-battling #jensen-help { display: none; }
+body.jensen-battling :is(a, button)[aria-disabled="true"] {
+  opacity: .35;
+  pointer-events: none;
+}
+body.jensen-battling nav a.jensen-portal::before { animation-play-state: paused; }
+
+@media (pointer: coarse) {
+  .jensen-battle-keyboard-help { display: none; }
+  .jensen-battle-touch-help { display: block; }
+}
+@media (max-width: 540px) {
+  .jensen-battle-hud { padding: 8px; }
+  .jensen-battle-heading strong { font-size: 10px; letter-spacing: 0; }
+  #jensen-battle-exit span { display: none; }
+}
