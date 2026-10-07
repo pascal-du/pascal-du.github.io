@@ -415,11 +415,15 @@
       const FEET = PH - 4;
       const SLOT_W = 172;
       const SLOT_H = 186;
+      const EMOTE_EXTRA_TICKS = 3 * 60; // Three extra seconds at the simulation's 60 Hz rate.
       const keys = new Set();
       const EMOTES = [
         { row: 3, frames: 4, label: 'Waving', line: 'Hey, developers!' },
         { row: 7, frames: 6, label: 'Cheering', line: 'GPU power!' },
-        { row: 6, frames: 6, label: 'Shrugging', line: 'It works on my GPU.' }
+        { row: 6, frames: 6, label: 'Shrugging', line: 'It works on my GPU.' },
+        { row: 4, frames: 5, label: 'Hopping', line: 'One giant leap for GPUs!' },
+        { row: 5, frames: 8, label: 'Bowing', line: 'Thank you, developers!' },
+        { row: 8, frames: 6, label: 'Thinking', line: 'How many GPUs will this need?' }
       ];
       let lastTime = performance.now();
       let runFrameClock = 0;
@@ -574,7 +578,7 @@
 
       function startEmote() {
         state.emoteIndex = (state.emoteIndex + 1) % EMOTES.length;
-        state.emoteTimer = EMOTES[state.emoteIndex].frames * 10;
+        state.emoteTimer = EMOTES[state.emoteIndex].frames * 10 + EMOTE_EXTRA_TICKS;
         render(0);
       }
 
@@ -752,7 +756,8 @@
 
         if (state.emoteTimer > 0) {
           const emote = EMOTES[state.emoteIndex];
-          const frame = Math.min(emote.frames - 1, Math.floor((emote.frames * 10 - state.emoteTimer) / 10));
+          const elapsed = emote.frames * 10 + EMOTE_EXTRA_TICKS - state.emoteTimer;
+          const frame = Math.floor(elapsed / 10) % emote.frames;
           statusText.textContent = emote.label;
           setFrame(frame, emote.row);
           return;

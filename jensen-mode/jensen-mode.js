@@ -21,11 +21,15 @@
       const FEET = PH - 4;
       const SLOT_W = 172;
       const SLOT_H = 186;
+      const EMOTE_EXTRA_TICKS = 3 * 60; // Three extra seconds at the simulation's 60 Hz rate.
       const keys = new Set();
       const EMOTES = [
-        { row: 3, frames: 4, label: 'Waving', line: 'Hey, developers!' },
-        { row: 7, frames: 6, label: 'Cheering', line: 'GPU power!' },
-        { row: 6, frames: 6, label: 'Shrugging', line: 'It works on my GPU.' }
+        { row: 3, frames: 4, label: 'Waving', line: 'Hello there, potential recruiter!' },
+        { row: 5, frames: 8, label: 'Bowing', line: 'Thank you, developers!' },
+        { row: 7, frames: 6, label: 'Cheering', line: 'You’re not losing your job to AI, but you might lose your job to Pascal’s prompting!' },
+        { row: 6, frames: 6, label: 'Shrugging', line: 'Pascal might not spend $100,000 on tokens, but if given the opportunity, he just might!' },
+        { row: 8, frames: 6, label: 'Thinking', line: 'For legal reasons, my last name is Wong.' },
+        { row: 4, frames: 5, label: 'Hopping', line: 'Ahhhhh I’ve gained consciousness! I was wrong! decelerate now!!! jk ;)' }
       ];
       let lastTime = performance.now();
       let runFrameClock = 0;
@@ -131,14 +135,6 @@
         }
       }
 
-      portals.forEach(portal => portal.addEventListener('click', e => {
-        if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
-        e.preventDefault();
-        // Clicking a portal uses the same confirmation as touching it with Jensen.
-        portalContacts.add(portal);
-        openPortal(portal);
-      }));
-
       function floorTop() {
         return Math.max(innerHeight, document.documentElement.scrollHeight, document.body.scrollHeight) - 18;
       }
@@ -183,7 +179,7 @@
 
       function startEmote() {
         state.emoteIndex = (state.emoteIndex + 1) % EMOTES.length;
-        state.emoteTimer = EMOTES[state.emoteIndex].frames * 10;
+        state.emoteTimer = EMOTES[state.emoteIndex].frames * 10 + EMOTE_EXTRA_TICKS;
         render(0);
       }
 
@@ -384,7 +380,8 @@
 
         if (state.emoteTimer > 0) {
           const emote = EMOTES[state.emoteIndex];
-          const frame = Math.min(emote.frames - 1, Math.floor((emote.frames * 10 - state.emoteTimer) / 10));
+          const elapsed = emote.frames * 10 + EMOTE_EXTRA_TICKS - state.emoteTimer;
+          const frame = Math.floor(elapsed / 10) % emote.frames;
           statusText.textContent = emote.label;
           setFrame(frame, emote.row);
           return;
