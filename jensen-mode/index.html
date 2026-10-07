@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home – Pascal U</title>
+    <link rel="stylesheet" href="../style.css" />
+    <script defer src="../menu-toggle.js"></script>
+    <script defer src="../dynamic-background.js"></script>
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="jensen-mode.css" />
+
+    <script defer src="jensen-mode.js"></script>
+</head>
+<body>
+    <header>
+        <div class="branding">
+            <img src="../me.gif" alt="rotating head" width="38" height="38">
+            <h1>Pascal U</h1>
+        </div>
+        <button class="menu-toggle" aria-label="Toggle navigation">
+            ☰
+        </button>
+        <nav>
+            <ul>
+                <li><a href="index.html" aria-current="page">Home</a></li>
+                <li><a class="jensen-portal" data-jensen-portal="Projects" style="--portal-color: #65d8ff" href="projects.html"><span>Projects</span></a></li>
+                <li><a class="jensen-portal" data-jensen-portal="Papers" style="--portal-color: #ba95ff" href="papers.html"><span>Papers</span></a></li>
+                <li><a class="jensen-portal" data-jensen-portal="Contact" style="--portal-color: #72f0b2" href="contact.html"><span>Contact</span></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section>
+        <h2>whoami</h2>
+        <p>
+            Student at UCL enrolled on the MSc Information Security programme (2025 - 2026).
+        </p>
+        <p>
+            BSc in Computer Science (1st) from University of Surrey (2022 - 2025).
+        </p>
+        <p>
+            Hobbies include rock climbing, jazz guitar, vibe-coding.
+        </p>
+        <div class="social-links" aria-label="Social profiles">
+            <a class="social-button" data-jensen-platform-label="GitHub" data-jensen-speech="Hi there, I'm Jensen! You can move me around and I'll tell you what Pascal's been up to!" href="https://github.com/pascal-du" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a class="social-button" data-jensen-platform-label="LinkedIn" data-jensen-speech="Feel free to add Pascal on LinkedIn! He's been pretty lonely since graduating." href="https://www.linkedin.com/in/pascal-u/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </div>
+        <h2>Experience</h2>
+        <article class="card" data-jensen-speech="You are not talking to someone who woke up not understanding backpropogation!">
+            <h3>
+                Lab Assistant, Artificial Intelligence
+                <em>University of Surrey</em>, Feb 2025 to May 2025
+            </h3>
+            <p>
+                - Assist in understanding basic AI concepts (linear regression, CNNs, backpropagation, optimisation)
+            </p>
+            <p>
+                - Debugging python code and assist in using tools such as PyTorch, scikit-learn, Matplotlib, etc.
+            </p>
+            <p>
+                <a href="https://catalogue.surrey.ac.uk/2024-5/module/COM2028" target="_blank">Module Information</a>
+            </p>
+        </article>
+
+        <article class="card" data-jensen-speech="This may be one of the most important technologies of our time! But I may be biased...">
+            <h3>
+                Lab Assistant, Parallel Computing
+                <em>University of Surrey</em>, Feb 2025 to May 2025
+            </h3>
+            <p>
+                - Assist in labs with understanding basic CUDA and C++ principles
+            </p>
+            <p>
+                - Debug issues with Eclipse IDE and the CUDA visual profiler
+            </p>
+            <p>
+                <a href="https://catalogue.surrey.ac.uk/2024-5/module/COM2039" target="_blank">Module Information</a>
+            </p>
+        </article>
+
+        <article class="card" data-jensen-speech="Even my leather jacket needs a scheduler.">
+            <h3>
+                Lab Assistant, Operating Systems
+                <em>University of Surrey</em>, Feb 2024 to May 2024
+            </h3>
+            <p>
+                - Explain OS concepts e.g., process management, memory allocation, threads, and file systems
+            </p>
+            <p>
+                <a href="https://catalogue.surrey.ac.uk/2023-4/module/COM1032" target="_blank">Module Information</a>
+            </p>
+        </article>
+    </section>
+
+    <footer>
+        &copy; 2025 Pascal U. All rights reserved.
+    </footer>
+
+    <div id="jensen-game-layer" aria-hidden="true">
+      <div id="jensen-player">
+        <div id="jensen-sprite"></div>
+        <div id="jensen-speech" hidden></div>
+      </div>
+    </div>
+
+    <aside id="jensen-hud" aria-label="Jensen game controls">
+      <div class="jensen-hud-row">
+        <strong>JENSEN // PLATFORM HOP</strong>
+        <span id="jensen-score">5 platforms</span>
+      </div>
+      <div class="jensen-hud-row">
+        <span id="jensen-status" aria-live="off">On a card</span>
+        <button id="jensen-reset" type="button" title="Return Jensen to a visible platform">Reset position</button>
+      </div>
+      <div id="jensen-help">A/D or ←/→ move · Space jump · Shift dash · S drop / fast fall · E emote · R reset · Scroll to explore</div>
+    </aside>
+
+    <div id="jensen-touch" aria-label="Jensen touch controls">
+      <button type="button" data-jensen-key="ArrowLeft" aria-label="Move left">◀</button>
+      <button type="button" data-jensen-key="ArrowRight" aria-label="Move right">▶</button>
+      <button type="button" data-jensen-tap="jump" aria-label="Jump">↑</button>
+      <button type="button" data-jensen-tap="pound" aria-label="Drop through platform or fall faster" title="Fall / drop through">↓</button>
+      <button type="button" data-jensen-tap="dash" aria-label="Dash">⚡</button>
+      <button type="button" data-jensen-tap="emote" aria-label="Emote">☺</button>
+    </div>
+
+</body>
+</html>

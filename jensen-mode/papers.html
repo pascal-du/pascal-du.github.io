@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Papers – Pascal U</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="../style.css" />
     <style>
         .hidden-content {
             display: none;
@@ -22,9 +22,11 @@
             font-weight: bold;
         }
     </style>
-    <script defer src="menu-toggle.js"></script>
-    <script defer src="dynamic-background.js"></script>
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <script defer src="../menu-toggle.js"></script>
+    <script defer src="../dynamic-background.js"></script>
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="jensen-mode.css" />
+    <script defer src="jensen-mode.js"></script>
 </head>
 <body>
     <header>
@@ -36,16 +38,16 @@
         </button>
         <nav>
             <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="projects.html">Projects</a></li>
-            <li><a href="papers.html">Papers</a></li>
-            <li><a href="contact.html">Contact</a></li>
+                <li><a class="jensen-portal" data-jensen-portal="Home" style="--portal-color: #ffd477" href="index.html"><span>Home</span></a></li>
+                <li><a class="jensen-portal" data-jensen-portal="Projects" style="--portal-color: #65d8ff" href="projects.html"><span>Projects</span></a></li>
+                <li><a href="papers.html" aria-current="page">Papers</a></li>
+                <li><a class="jensen-portal" data-jensen-portal="Contact" style="--portal-color: #72f0b2" href="contact.html"><span>Contact</span></a></li>
             </ul>
         </nav>
     </header>
 
     <section>
-        <article class="card">
+        <article class="card" data-jensen-speech="The graph got smaller. The ideas got bigger.">
             <h3>
                 [<span class="counter"></span>] “Towards Scalable Android Malware Detection Through Function Call Graph Pruning”
                 <em>MSc Dissertation</em>, Sept 2026.
@@ -74,10 +76,10 @@
                 <button class="view-btn">View more...</button>
             </p>
             <p>
-                <a href="papers/dissertation.pdf" target="_blank">PDF</a>
+                <a href="../papers/dissertation.pdf" target="_blank">PDF</a>
             </p>
         </article>
-        <article class="card">
+        <article class="card" data-jensen-speech="I see graphs. I think GPUs.">
             <h3>
                 [<span class="counter"></span>] “Methods in Learning Graph Representations of Programs for Malware Detection”
                 <em>Research Literature Review</em>, Apr 2025.
@@ -103,11 +105,11 @@
                 <button class="view-btn">View more...</button>
             </p>
             <p>
-                <a href="papers/research_GRL.pdf" target="_blank">PDF</a>
+                <a href="../papers/research_GRL.pdf" target="_blank">PDF</a>
             </p>
         </article>
 
-        <article class="card">
+        <article class="card" data-jensen-speech="Privacy is a feature.">
             <h3>
                 [<span class="counter"></span>] Lecture Notes for
                 <em>COMP0061 Privacy Enhancing Technologies</em>, Apr 2026.
@@ -123,10 +125,10 @@
                 <button class="view-btn">View more...</button>
             </p>
             <p>
-                <a href="papers/PET_notes_UCL.pdf" target="_blank">PDF</a>
+                <a href="../papers/PET_notes_UCL.pdf" target="_blank">PDF</a>
             </p>
         </article>
-        <article class="card">
+        <article class="card" data-jensen-speech="Keep your secrets. Share your public key.">
             <h3>
                 [<span class="counter"></span>] Lecture Notes for
                 <em>COMP0025 Introduction to Cryptography</em>, Apr 2026.
@@ -142,11 +144,11 @@
                 <button class="view-btn">View more...</button>
             </p>
             <p>
-                <a href="papers/cryptography.pdf" target="_blank">PDF</a>
+                <a href="../papers/cryptography.pdf" target="_blank">PDF</a>
             </p>
         </article>
 
-        <article class="card">
+        <article class="card" data-jensen-speech="These honeypots come with a game plan.">
             <h3>
                 [<span class="counter"></span>] “Honeypot Allocation for Network Hardening in Industrial Control Systems”
                 <em>Final Year Project for BSc Computer Science</em>, May 2025.
@@ -168,11 +170,11 @@
                 <button class="view-btn">View more...</button>
             </p>
             <p>
-                <a href="papers/FYP_REPORT_redacted.pdf" target="_blank">PDF</a>
+                <a href="../papers/FYP_REPORT_redacted.pdf" target="_blank">PDF</a>
             </p>
         </article>
 
-        <article class="card">
+        <article class="card" data-jensen-speech="Let&#x27;s give those pixels an upgrade.">
             <h3>
                 [<span class="counter"></span>] “Chest X-Ray Image Enhancement Using The LED Framework”
                 <em>Deep Learning and Advanced AI Coursework</em>, May 2025.
@@ -190,11 +192,11 @@
                 <button class="view-btn">View more...</button>
             </p>
             <p>
-                <a href="papers/DEEP_CW.pdf" target="_blank">PDF</a>
+                <a href="../papers/DEEP_CW.pdf" target="_blank">PDF</a>
             </p>
         </article>
 
-        <article class="card">
+        <article class="card" data-jensen-speech="Attention is all you need. And a GPU.">
             <h3>
                 [<span class="counter"></span>] Lecture Notes for Weeks 1-6 
                 <em>Deep Learning and Advanced AI</em>, May 2025.
@@ -209,11 +211,11 @@
                 <button class="view-btn">View more...</button>
             </p>
             <p>
-                <a href="papers/DEEP_review.pdf" target="_blank">PDF</a>
+                <a href="../papers/DEEP_review.pdf" target="_blank">PDF</a>
             </p>
         </article>
 
-        <article class="card">
+        <article class="card" data-jensen-speech="Patch first. Emote later.">
             <h3>
                 [<span class="counter"></span>] Lecture Notes for Weeks 1-10 
                 <em>Ethical Hacking and Pentesting</em>, May 2025.
@@ -230,11 +232,11 @@
                 <button class="view-btn">View more...</button>
             </p>
             <p>
-                <a href="papers/ethical_hacking_review.pdf" target="_blank">PDF</a>
+                <a href="../papers/ethical_hacking_review.pdf" target="_blank">PDF</a>
             </p>
         </article>
 
-        <article class="card">
+        <article class="card" data-jensen-speech="Sanitise your inputs, developers.">
             <h3>
                 [<span class="counter"></span>] Part A: 
                 <em>Ethical Hacking and Pentesting Coursework</em>, Apr 2025.
@@ -247,11 +249,11 @@
                 <button class="view-btn">View more...</button>
             </p>
             <p>
-                <a href="papers/ethical_hacking_a_redacted.pdf" target="_blank">PDF</a>
+                <a href="../papers/ethical_hacking_a_redacted.pdf" target="_blank">PDF</a>
             </p>
         </article>
 
-        <article class="card">
+        <article class="card" data-jensen-speech="Time to inspect those binaries.">
             <h3>
                 [<span class="counter"></span>] Part B: 
                 <em>Ethical Hacking and Pentesting Coursework</em>, Apr 2025.
@@ -265,11 +267,11 @@
                 <button class="view-btn">View more...</button>
             </p>
             <p>
-                <a href="papers/ethical_hacking_b_redacted.pdf" target="_blank">PDF</a>
+                <a href="../papers/ethical_hacking_b_redacted.pdf" target="_blank">PDF</a>
             </p>
         </article>
 
-        <article class="card">
+        <article class="card" data-jensen-speech="Privacy by design. Leather by choice.">
             <h3>
                 [<span class="counter"></span>] Lecture Notes for Weeks 7-10 
                 <em>Privacy Enhancing Technologies</em>, Jan 2025.
@@ -284,11 +286,11 @@
                 <button class="view-btn">View more...</button>
             </p>
             <p>
-                <a href="papers/PET_Notes.pdf" target="_blank">PDF</a>
+                <a href="../papers/PET_Notes.pdf" target="_blank">PDF</a>
             </p>
         </article>
 
-        <article class="card">
+        <article class="card" data-jensen-speech="Even the ants are optimising.">
             <h3>
                 [<span class="counter"></span>] “A Novel Approach to Optimising Convolutional Neural Networks based on the Ant Colony Optimiser”
                 <em>Computational Intelligence Coursework</em>, Dec 2024.
@@ -307,7 +309,7 @@
                 <button class="view-btn">View more...</button>
             </p>
             <p>
-                <a href="papers/COMP_INT_CW_redacted.pdf" target="_blank">PDF</a>
+                <a href="../papers/COMP_INT_CW_redacted.pdf" target="_blank">PDF</a>
             </p>
         </article>
     </section>
@@ -334,5 +336,33 @@
             counter.textContent = index + 1;
         });
     </script>
+    <div id="jensen-game-layer" aria-hidden="true">
+      <div id="jensen-player">
+        <div id="jensen-sprite"></div>
+        <div id="jensen-speech" hidden></div>
+      </div>
+    </div>
+
+    <aside id="jensen-hud" aria-label="Jensen game controls">
+      <div class="jensen-hud-row">
+        <strong>JENSEN // PLATFORM HOP</strong>
+        <span id="jensen-score">12 platforms</span>
+      </div>
+      <div class="jensen-hud-row">
+        <span id="jensen-status" aria-live="off">On a card</span>
+        <button id="jensen-reset" type="button" title="Return Jensen to a visible platform">Reset position</button>
+      </div>
+      <div id="jensen-help">A/D or ←/→ move · Space jump · Shift dash · S drop / fast fall · E emote · R reset · Scroll to explore</div>
+    </aside>
+
+    <div id="jensen-touch" aria-label="Jensen touch controls">
+      <button type="button" data-jensen-key="ArrowLeft" aria-label="Move left">◀</button>
+      <button type="button" data-jensen-key="ArrowRight" aria-label="Move right">▶</button>
+      <button type="button" data-jensen-tap="jump" aria-label="Jump">↑</button>
+      <button type="button" data-jensen-tap="pound" aria-label="Drop through platform or fall faster" title="Fall / drop through">↓</button>
+      <button type="button" data-jensen-tap="dash" aria-label="Dash">⚡</button>
+      <button type="button" data-jensen-tap="emote" aria-label="Emote">☺</button>
+    </div>
+
 </body>
 </html>

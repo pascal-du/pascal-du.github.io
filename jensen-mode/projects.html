@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Projects – Pascal U</title>
+    <link rel="stylesheet" href="../style.css" />
+    <script defer src="../menu-toggle.js"></script>
+    <script defer src="../dynamic-background.js"></script>
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="jensen-mode.css" />
+    <script defer src="jensen-mode.js"></script>
+</head>
+<body>
+    <header>
+        <div class="branding">
+            <h1>Personal Projects</h1>
+        </div>
+        <button class="menu-toggle" aria-label="Toggle navigation">
+            ☰
+        </button>
+        <nav>
+            <ul>
+                <li><a class="jensen-portal" data-jensen-portal="Home" style="--portal-color: #ffd477" href="index.html"><span>Home</span></a></li>
+                <li><a href="projects.html" aria-current="page">Projects</a></li>
+                <li><a class="jensen-portal" data-jensen-portal="Papers" style="--portal-color: #ba95ff" href="papers.html"><span>Papers</span></a></li>
+                <li><a class="jensen-portal" data-jensen-portal="Contact" style="--portal-color: #72f0b2" href="contact.html"><span>Contact</span></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section>
+        <article class="card" data-jensen-speech="Prune the graph. Keep the GPU busy.">
+            <div class="card-content">
+                <h3>android grl pruning evaluation</h3>
+                <p>
+                codebase for my msc dissertation “<a href="../papers/dissertation.pdf">Towards Scalable Android Malware Detection Through Function Call Graph Pruning</a>”.
+                </p>
+                <p><a href="https://github.com/pascal-du/dissertation-android-grl-pruning">github</a></p>
+            </div>
+        </article>
+        <article class="card" data-jensen-speech="Every network deserves a good map.">
+            <div class="card-content">
+                <h3>ics topology attack path visualiser</h3>
+                <p>
+                rewrite of the GENIND topology generator in my cs fyp as a javascript demo.
+                </p>
+                <p><a href="../projects/genind.html">Demo</a></p>
+            </div>
+        </article>
+
+        <article class="card" data-jensen-speech="Small keys? Big math.">
+            <div class="card-content">
+                <h3>toy rsa keygen, encrypt, & crt decrypt</h3>
+                <p>
+                A mini RSA encryption demo.
+                </p>
+                <p><a href="../projects/rsa.html">Demo</a></p>
+            </div>
+        </article>
+        <article class="card" data-jensen-speech="Let&#x27;s give those nodes some connections.">
+            <h3>graph visualiser</h3>
+            <p>
+                visualiser to help preview graphs while working on dissertation.
+            </p>
+            <p>
+                <a href="../projects/graphvisualiser.html">Demo</a>
+            </p>
+        </article>
+        <!--
+        <article class="card">
+            <h3>2. Project 2</h3>
+            <p>
+                lorem ipsum etc.
+            </p>
+            <p>
+                Technologies: Node.js, Express.js, PostgreSQL, EJS, Bootstrap.
+            </p>
+            <p>
+                <a href="https://github.com/pascal-du/" target="_blank">View Code on GitHub</a>
+            </p>
+        </article>
+        -->
+        <!-- Add more project cards as needed -->
+    </section>
+
+    <footer>
+        &copy; 2025 Pascal U. All rights reserved.
+    </footer>
+    <div id="jensen-game-layer" aria-hidden="true">
+      <div id="jensen-player">
+        <div id="jensen-sprite"></div>
+        <div id="jensen-speech" hidden></div>
+      </div>
+    </div>
+
+    <aside id="jensen-hud" aria-label="Jensen game controls">
+      <div class="jensen-hud-row">
+        <strong>JENSEN // PLATFORM HOP</strong>
+        <span id="jensen-score">4 platforms</span>
+      </div>
+      <div class="jensen-hud-row">
+        <span id="jensen-status" aria-live="off">On a card</span>
+        <button id="jensen-reset" type="button" title="Return Jensen to a visible platform">Reset position</button>
+      </div>
+      <div id="jensen-help">A/D or ←/→ move · Space jump · Shift dash · S drop / fast fall · E emote · R reset · Scroll to explore</div>
+    </aside>
+
+    <div id="jensen-touch" aria-label="Jensen touch controls">
+      <button type="button" data-jensen-key="ArrowLeft" aria-label="Move left">◀</button>
+      <button type="button" data-jensen-key="ArrowRight" aria-label="Move right">▶</button>
+      <button type="button" data-jensen-tap="jump" aria-label="Jump">↑</button>
+      <button type="button" data-jensen-tap="pound" aria-label="Drop through platform or fall faster" title="Fall / drop through">↓</button>
+      <button type="button" data-jensen-tap="dash" aria-label="Dash">⚡</button>
+      <button type="button" data-jensen-tap="emote" aria-label="Emote">☺</button>
+    </div>
+
+</body>
+</html>

@@ -20,7 +20,8 @@
       display: block;
       pointer-events: none;
     }
-    body > :not(#network-canvas):not(script) {
+    /* Keep defaults weaker than component styles, including fixed game overlays. */
+    body > :where(:not(#network-canvas):not(script)) {
       position: relative;
       z-index: 1;
     }

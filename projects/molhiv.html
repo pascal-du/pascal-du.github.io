@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GENIND Topology</title>
+  <link rel="stylesheet" href="../style.css" />
+  <!-- math scripts -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.19.0/dist/katex.min.css">
+
+<script defer
+        src="https://cdn.jsdelivr.net/npm/katex@0.19.0/dist/katex.min.js"></script>
+
+<script defer
+        src="https://cdn.jsdelivr.net/npm/katex@0.19.0/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body);"></script>
+
+  <script defer src="../menu-toggle.js"></script>
+  <script defer src="../dynamic-background.js"></script>
+  <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <style>
+        body {
+        counter-reset: section subsection;
+    }
+        h2:not(#abstract-heading) {
+        counter-increment: section;
+        counter-reset: subsection;
+    }
+        h2:not(#abstract-heading)::before {
+        content: counter(section) ". ";
+    }
+        h3 {
+        counter-increment: subsection;
+    }
+        h3::before {
+        content: counter(section) "." counter(subsection) " ";
+    }
+        h1 {
+        margin: 0 auto;
+        text-align: center;
+    }
+        .abs {
+        max-width: 680px;
+        margin: 1.5rem auto;
+        padding: clamp(1rem, 4vw, 1.75rem);
+        text-align: left;
+    }
+        .abs h2 {
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+        text-align: center;
+    }
+        .abs p {
+        line-height: 1.75;
+    }
+        .authors {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem 1.5rem;
+        margin: 0.75rem 0 1.5rem;
+        padding: 0;
+        list-style: none;
+        font-size: 0.95rem;
+    }
+    ol {
+        padding-left: 4rem;
+        margin: 0.75rem 0;
+    }
+    li {
+        font-size: 0.95rem;
+    }
+    </style>
+</head>
+<body>
+<header>
+    <div class="branding">
+        <h1>working on ogbg-molhiv</h1>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+        ☰
+    </button>
+    <nav>
+        <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../projects.html">Projects</a></li>
+        <li><a href="../papers.html">Papers</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+  <h1>Combining Graph Representation Learning with Molecular Fingerprints</h1>
+  <ul class="authors" aria-label="Authors">
+    <li>Main Contributor: GPT-5.6 Sol High</li>
+    <li>Proofread and edited: Pascal</li>
+  </ul>
+  <section class="abs" aria-labelledby="abstract-heading">
+    <h2 id="abstract-heading">Abstract</h2>
+    <p>
+    Molecular activity prediction can be achieved through a multitude of machine learning methods.
+    This project studies representations and ensemble choices for the task of molecular HIV inhibitor prediction on the ogbg-molhiv dataset.
+    Across five seeds, a random forest using concatenated molecular fingerprints achieves test ROC-AUC \(0.8385\pm0.0017\).
+    Atom-feature masking and learned graph-fingerprint fusion improves validation performance more consistently than test performance.
+    Exploring multiple GNN architectures, we identify GatedGCN as a candidate ensemble component achieving test ROC-AUC \(0.7925\).
+    A validation-selected RF/GatedGCN blend reaches ROC-AUC \(0.8415\) and adding a small descriptor-SVM contribution yields a score of \(0.8416\).
+    </p>
+  </section>
+  <h2>Introduction</h2>
+  <p>
+    After completing my dissertation, I had a fair amount of colab credits leftover and decided I wanted to use the knowledge I acquired about GNNs and try working on a domain I knew nothing about.
+    In my research I found the Stanford Open Graph Benchmark which compiles various domain specific graph datasets we can use for training classifiers. The dataset I decided to focus on was ogbg-molhiv.
+  </p>
+  <br>
+  <p>
+    The task is to create a model which can identify HIV protease inhibitors among a set of chemical compounds.
+    Because molecular graphs and engineered fingerprints encode different aspects of chemical structure, intuitively we try to create a learning model incorporating different aspects by exploring varying splits and using optimal features.
+    Practically, this is dependent on the learner, optimisation procedure, and the features embedded in each atomic struture.
+    As such, we explore three questions in this regard:
+  </p>
+    <ol>
+        <li>Whether feature masking or learned fingerprint fusion improves a fixed graph baseline.</li>
+        <li>If alternative propagation operators offer useful predictive diversity.</li>
+        <li>Can output-level ensembles improve upon strong fingerprint RFs.</li>
+    </ol>
+  <p>
+    This study contributes an imperical comparison of the implementations and configurations tested here.
+    The underlying graph operators, fingerprints, and ensemble mechanisms are established techniques.
+  </p>
+  <br>
+  <h2>Methodology</h2>
+  <h3>Dataset</h3>
+  <p>
+    <a href="https://ogb.stanford.edu/docs/leader_graphprop/#ogbg-molhiv">ogbg-molhiv</a> is a binary molecular activity benchmark containing \(41,127\) graphs with scaffold partitions \(32,901\), \(4,113\), and \(4,113\) graphs for training, validation and testing respectively, each including \(1,232\), \(81\), and \(130\) positive labels.
+    Molecule-derived features follow the row order of OGB's SMILES mapping; cached atom features are checked against graph node counts and offsets.
+  </p>
+  <br>
+  <p>
+    ROC-AUC is the primary metric and is computed over all molecules in a split, rather than averaged over minibatches.
+    Neural models supply logits, forests supply positive-class probabilities, and the support-vector classifier supplies decision scores.
+    ROC-AUC depends on score ordering and does not require these scores to be calibrated.
+    Average precision (AP) is additionally reported for the descriptor-only classifiers.
+    Neural checkpoints maximize validation ROC-AUC; ties retain the earlier checkpoint.
+    Descriptor hyperparameters and ensemble weights are selected by validation ROC-AUC.
+    Training and fitted preprocessing use the training partition only; selected models are not refitted on training plus validation data.
+  </p>
+  <br>
+  <p>
+    The neural representation comparison uses seeds \(0-4\), and the \(5,000\)-tree rich-fingerprint forest baseline uses seeds \(5-9\).
+    The architecture comparison uses seed \(0\), and the attributed fusion experiment uses seeds \(0-2\).
+    These seed sets differ, so comparisons between graph models and the forest baseline are unpaired.
+    Unless stated otherwise, \(\pm\) denotes the sample standard deviation across independently seeded fits on the same partition, not a confidence interval or variation across data splits.
+    Ensemble scores are ROC-AUCs of combined predictions and are reported separately from mean individual-model ROC-AUC.
+  </p>
+  <br>
+  <h3>Molecular Representations</h3>
+  <p>
+    <b>Categorical graph features.</b>
+    Using OGB's nine categorical atom features and three categorical bond features.
+    OGB AtomEncoder and BondEncoder modules sum learned embeddings of the individual categorical fields.
+    Bonds are represented in both directions in the supplied graph.
+    Bond embeddings are computed once per forward pass and reused across propagation layers in the GINE, PNA, and residual gated implementations.
+    The GIN virtual-node model does not use bond features.
+  </p>
+  <br>
+  <p>
+    <b>Additional atom attributes.</b>
+    The architecture cohort add three RDKit-derived values per atom: its contribution to topological polar surface area (TPSA), atomic mass, and a hydrogen-bond-donor indicator defined by RDKit's donor SMARTS matches.
+    The values are divided by fixed scales \((40,200,1)\) and passed through a \(3\rightarrow d\rightarrow d\) MLP with an intermediate ReLU.
+    Its output is added to the categorical atom embedding.
+    These scales are fixed constants, not estimated from held-out data.
+    The historical five-seed GINE, masking, and fusion runs do not include these attributes; this was verified from checkpoint tensors, which take precedence over subsequently edited configuration files.
+  </p>
+  <br>
+  <p>
+    <b>Fingerprint features.</b>
+    The Morgan representation is a 2,048-bit radius-2 fingerprint.
+    The rich representation concatenates four RDKit bit vectors: radius-2 Morgan (2,048 bits), radius-2 feature Morgan using feature-based atom invariants (2,048 bits), MACCS keys (167 bits), and a hashed atom-pair fingerprint (2,048 bits), giving 6,311 bits.
+    Fingerprints are not standardized.
+    When normal SMILES sanitization fails, extraction retries with sanitization disabled, a non-strict property-cache update, and ring initialization.
+    If fingerprint generation still fails, the implementation emits an all-zero vector and a warning.
+    No molecule is removed.
+    Atom-attribute extraction uses the same parsing fallback but raises an error if attributes cannot be calculated or atom counts disagree.
+  </p>
+  unfinished...
+
+
+
+
+
+  <footer>
+    &copy; 2025 Pascal U. All rights reserved.
+  </footer>
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home – Pascal U</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="menu-toggle.js"></script>
+    <script defer src="dynamic-background.js"></script>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+    <style id="jensen-mayhem-style">
+      /* Jensen platform game overlay. */
+      #jensen-game-layer {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483000;
+        pointer-events: none;
+        overflow: hidden;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      }
+
+      #jensen-player {
+        position: absolute;
+        width: 86px;
+        height: 93px;
+        left: 0;
+        top: 0;
+        will-change: transform;
+        pointer-events: none;
+        filter: drop-shadow(0 8px 5px rgba(0, 0, 0, .28));
+      }
+
+      #jensen-sprite {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 172px;
+        height: 186px;
+        transform: scale(.5);
+        transform-origin: 0 0;
+        background-image: url("jensen-spritesheet.webp");
+        background-repeat: no-repeat;
+        background-size: 1374px 2048px;
+        image-rendering: pixelated;
+        will-change: background-position, transform;
+      }
+
+      #jensen-speech {
+        position: absolute;
+        bottom: calc(100% + 12px);
+        left: 43px;
+        z-index: 1;
+        width: max-content;
+        max-width: min(240px, calc(100vw - 24px));
+        padding: 10px 12px;
+        border: 2px solid #17191d;
+        border-radius: 12px;
+        background: #fff;
+        color: #17191d;
+        font: 600 12px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        text-align: center;
+        pointer-events: none;
+      }
+
+      #jensen-speech[hidden] { display: none; }
+
+      #jensen-speech::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: var(--tail-left, 50%);
+        width: 12px;
+        height: 12px;
+        border-right: 2px solid #17191d;
+        border-bottom: 2px solid #17191d;
+        background: #fff;
+        transform: translateX(-50%) rotate(45deg);
+      }
+
+      #jensen-player.facing-left #jensen-sprite {
+        transform: translateX(86px) scale(-.5, .5);
+      }
+
+      #jensen-player.jensen-dashing {
+        filter: drop-shadow(0 8px 5px rgba(0, 0, 0, .28)) drop-shadow(12px 0 0 rgba(120, 180, 255, .28));
+      }
+
+      #jensen-player.jensen-ground-pound #jensen-sprite {
+        transform: scale(.5) rotate(7deg);
+      }
+
+      #jensen-player.facing-left.jensen-ground-pound #jensen-sprite {
+        transform: translateX(86px) scale(-.5, .5) rotate(7deg);
+      }
+
+      #jensen-hud {
+        position: fixed;
+        right: 14px;
+        bottom: 14px;
+        z-index: 2147483646;
+        width: min(290px, calc(100vw - 28px));
+        padding: 10px 11px;
+        border: 1px solid rgba(255,255,255,.2);
+        border-radius: 10px;
+        background: rgba(12, 14, 18, .87);
+        color: #f4f6f8;
+        box-shadow: 0 10px 30px rgba(0,0,0,.25);
+        backdrop-filter: blur(8px);
+        pointer-events: auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        font-size: 11px;
+        line-height: 1.35;
+      }
+
+      #jensen-hud .jensen-hud-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      #jensen-hud strong {
+        font-size: 12px;
+        letter-spacing: .04em;
+      }
+
+      #jensen-hud button {
+        appearance: none;
+        border: 1px solid rgba(255,255,255,.22);
+        border-radius: 7px;
+        background: rgba(255,255,255,.08);
+        color: inherit;
+        padding: 5px 8px;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      #jensen-hud button:hover { background: rgba(255,255,255,.16); }
+      #jensen-hud button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+      #jensen-help { margin-top: 6px; color: rgba(255,255,255,.7); }
+
+      #jensen-touch {
+        display: none;
+        position: fixed;
+        left: 12px;
+        bottom: 12px;
+        z-index: 2147483646;
+        width: min(318px, calc(100vw - 24px));
+        gap: 6px;
+        pointer-events: auto;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      #jensen-touch button {
+        flex: 1 1 48px;
+        min-width: 0;
+        max-width: 48px;
+        height: 48px;
+        border: 1px solid rgba(255,255,255,.28);
+        border-radius: 50%;
+        background: rgba(10, 12, 15, .72);
+        color: #fff;
+        font: 700 18px/1 system-ui, sans-serif;
+        touch-action: none;
+      }
+
+      @media (pointer: coarse) {
+        #jensen-touch { display: flex; }
+        #jensen-hud { bottom: 72px; }
+      }
+
+      @media (max-width: 540px) {
+        #jensen-hud { font-size: 10px; width: min(250px, calc(100vw - 28px)); }
+        #jensen-help { display: none; }
+      }
+
+      nav a.jensen-portal {
+        position: relative;
+        isolation: isolate;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 88px;
+        min-height: 48px;
+        padding: 10px 14px;
+        border: 1px solid var(--portal-color);
+        border-radius: 999px;
+        background: radial-gradient(ellipse, #18202b 0%, #080b14 72%);
+        color: #fff;
+        text-decoration: none;
+        box-shadow: 0 0 12px var(--portal-color), inset 0 0 12px var(--portal-color);
+        animation: jensen-portal-glow 2.4s ease-in-out infinite alternate;
+      }
+
+      nav a.jensen-portal::before {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: conic-gradient(transparent, var(--portal-color), transparent 48%, var(--portal-color), transparent);
+        opacity: .55;
+        animation: jensen-portal-swirl 3s linear infinite;
+        pointer-events: none;
+      }
+
+      nav a.jensen-portal span { text-shadow: 0 1px 5px #000, 0 0 8px #000; }
+      nav a.jensen-portal:hover { border-color: #fff; }
+      nav a.jensen-portal:focus-visible { outline: 2px solid #fff; outline-offset: 5px; }
+      nav li:has(.jensen-portal) { padding: 3px 0; }
+
+      @keyframes jensen-portal-glow {
+        to { box-shadow: 0 0 20px var(--portal-color), inset 0 0 18px var(--portal-color); }
+      }
+      @keyframes jensen-portal-swirl { to { transform: rotate(360deg); } }
+
+      #jensen-portal-dialog {
+        position: fixed;
+        inset: 0;
+        margin: auto;
+        width: min(360px, calc(100vw - 32px));
+        max-height: calc(100dvh - 32px);
+        overflow: auto;
+        padding: 24px;
+        border: 1px solid var(--portal-color, #65d8ff);
+        border-radius: 18px;
+        background: #0e121d;
+        color: #f4f6ff;
+        box-shadow: 0 0 36px color-mix(in srgb, var(--portal-color, #65d8ff) 35%, transparent);
+        font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+
+      #jensen-portal-dialog::backdrop { background: rgba(0, 0, 0, .75); backdrop-filter: blur(4px); }
+      #jensen-portal-dialog h2 { margin: 0 0 10px; font-size: 20px; }
+      #jensen-portal-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+      #jensen-portal-actions button, #jensen-portal-actions a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 10px 14px;
+        border: 1px solid #495163;
+        border-radius: 9px;
+        background: #1a2030;
+        color: #fff;
+        font: inherit;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      #jensen-portal-actions #jensen-portal-visit {
+        border-color: var(--portal-color);
+        background: var(--portal-color);
+        color: #080b14;
+        font-weight: 700;
+      }
+      #jensen-portal-actions :focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+      @media (prefers-reduced-motion: reduce) {
+        nav a.jensen-portal, nav a.jensen-portal::before { animation: none; }
+      }
+
+    </style>
+
+</head>
+<body>
+    <header>
+        <div class="branding">
+            <img src="me.gif" alt="rotating head" width="38" height="38">
+            <h1>Pascal U</h1>
+        </div>
+        <button class="menu-toggle" aria-label="Toggle navigation">
+            ☰
+        </button>
+        <nav>
+            <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a class="jensen-portal" data-jensen-portal="Projects" style="--portal-color: #65d8ff" href="projects.html"><span>Projects</span></a></li>
+            <li><a class="jensen-portal" data-jensen-portal="Papers" style="--portal-color: #ba95ff" href="papers.html"><span>Papers</span></a></li>
+            <li><a class="jensen-portal" data-jensen-portal="Contact" style="--portal-color: #72f0b2" href="contact.html"><span>Contact</span></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section>
+        <h2>whoami</h2>
+        <p>
+            Student at UCL enrolled on the MSc Information Security programme (2025 - 2026).
+        </p>
+        <p>
+            BSc in Computer Science (1st) from University of Surrey (2022 - 2025).
+        </p>
+        <p>
+            Hobbies include rock climbing, jazz guitar, vibe-coding.
+        </p>
+        <div class="social-links" aria-label="Social profiles">
+            <a class="social-button" data-jensen-platform-label="GitHub" data-jensen-speech="Hi there, I'm Jensen! You can move me around and I'll tell you what Pascal's been up to!" href="https://github.com/pascal-du" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a class="social-button" data-jensen-platform-label="LinkedIn" data-jensen-speech="Feel free to add Pascal on LinkedIn! He's been pretty lonely since graduating." href="https://www.linkedin.com/in/pascal-u/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </div>
+        <h2>Experience</h2>
+        <article class="card" data-jensen-speech="You are not talking to someone who woke up not understanding backpropogation!">
+            <h3>
+                Lab Assistant, Artificial Intelligence
+                <em>University of Surrey</em>, Feb 2025 to May 2025
+            </h3>
+            <p>
+                - Assist in understanding basic AI concepts (linear regression, CNNs, backpropagation, optimisation)
+            </p>
+            <p>
+                - Debugging python code and assist in using tools such as PyTorch, scikit-learn, Matplotlib, etc.
+            </p>
+            <p>
+                <a href="https://catalogue.surrey.ac.uk/2024-5/module/COM2028" target="_blank">Module Information</a>
+            </p>
+        </article>
+
+        <article class="card" data-jensen-speech="This may be one of the most important technologies of our time! But I may be biased...">
+            <h3>
+                Lab Assistant, Parallel Computing
+                <em>University of Surrey</em>, Feb 2025 to May 2025
+            </h3>
+            <p>
+                - Assist in labs with understanding basic CUDA and C++ principles
+            </p>
+            <p>
+                - Debug issues with Eclipse IDE and the CUDA visual profiler
+            </p>
+            <p>
+                <a href="https://catalogue.surrey.ac.uk/2024-5/module/COM2039" target="_blank">Module Information</a>
+            </p>
+        </article>
+
+        <article class="card" data-jensen-speech="Even my leather jacket needs a scheduler.">
+            <h3>
+                Lab Assistant, Operating Systems
+                <em>University of Surrey</em>, Feb 2024 to May 2024
+            </h3>
+            <p>
+                - Explain OS concepts e.g., process management, memory allocation, threads, and file systems
+            </p>
+            <p>
+                <a href="https://catalogue.surrey.ac.uk/2023-4/module/COM1032" target="_blank">Module Information</a>
+            </p>
+        </article>
+    </section>
+
+    <footer>
+        &copy; 2025 Pascal U. All rights reserved.
+    </footer>
+
+    <div id="jensen-game-layer" aria-hidden="true">
+      <div id="jensen-player">
+        <div id="jensen-sprite"></div>
+        <div id="jensen-speech" hidden></div>
+      </div>
+    </div>
+
+    <aside id="jensen-hud" aria-label="Jensen game controls">
+      <div class="jensen-hud-row">
+        <strong>JENSEN // PLATFORM HOP</strong>
+        <span id="jensen-score">5 platforms</span>
+      </div>
+      <div class="jensen-hud-row">
+        <span id="jensen-status" aria-live="off">On a card</span>
+        <button id="jensen-reset" type="button" title="Return Jensen to a visible platform">Reset position</button>
+      </div>
+      <div id="jensen-help">A/D or ←/→ move · Space jump · Shift dash · S drop / fast fall · E emote · R reset · Scroll to explore</div>
+    </aside>
+
+    <div id="jensen-touch" aria-label="Jensen touch controls">
+      <button type="button" data-jensen-key="ArrowLeft" aria-label="Move left">◀</button>
+      <button type="button" data-jensen-key="ArrowRight" aria-label="Move right">▶</button>
+      <button type="button" data-jensen-tap="jump" aria-label="Jump">↑</button>
+      <button type="button" data-jensen-tap="pound" aria-label="Drop through platform or fall faster" title="Fall / drop through">↓</button>
+      <button type="button" data-jensen-tap="dash" aria-label="Dash">⚡</button>
+      <button type="button" data-jensen-tap="emote" aria-label="Emote">☺</button>
+    </div>
+
+    <dialog id="jensen-portal-dialog" aria-labelledby="jensen-portal-title" aria-describedby="jensen-portal-description">
+      <h2 id="jensen-portal-title">Enter portal?</h2>
+      <p id="jensen-portal-description">Would you like to visit this page?</p>
+      <div id="jensen-portal-actions">
+        <button id="jensen-portal-stay" type="button" autofocus>Stay here</button>
+        <a id="jensen-portal-visit" href="projects.html">Visit page</a>
+      </div>
+    </dialog>
+
+    <script id="jensen-mayhem-script">
+    (() => {
+      'use strict';
+
+      if (window.__jensenMayhemLoaded) return;
+      window.__jensenMayhemLoaded = true;
+
+      const player = document.getElementById('jensen-player');
+      const sprite = document.getElementById('jensen-sprite');
+      const speech = document.getElementById('jensen-speech');
+      const statusText = document.getElementById('jensen-status');
+      const scoreText = document.getElementById('jensen-score');
+      const resetBtn = document.getElementById('jensen-reset');
+      const touch = document.getElementById('jensen-touch');
+      const portals = [...document.querySelectorAll('nav a[data-jensen-portal]')];
+      const portalDialog = document.getElementById('jensen-portal-dialog');
+      const portalTitle = document.getElementById('jensen-portal-title');
+      const portalDescription = document.getElementById('jensen-portal-description');
+      const portalVisit = document.getElementById('jensen-portal-visit');
+      const portalStay = document.getElementById('jensen-portal-stay');
+      let portalContacts = new Set();
+      const platforms = [...document.querySelectorAll('body > section > article.card, body > section > .social-links > .social-button')];
+
+      const PW = 86;
+      const PH = 93;
+      const FEET = PH - 4;
+      const SLOT_W = 172;
+      const SLOT_H = 186;
+      const keys = new Set();
+      const EMOTES = [
+        { row: 3, frames: 4, label: 'Waving', line: 'Hey, developers!' },
+        { row: 7, frames: 6, label: 'Cheering', line: 'GPU power!' },
+        { row: 6, frames: 6, label: 'Shrugging', line: 'It works on my GPU.' }
+      ];
+      let lastTime = performance.now();
+      let runFrameClock = 0;
+      let runFrameIndex = 0;
+
+      // Physics stays in document coordinates; only rendering subtracts the scroll offset.
+      const state = {
+        x: 34,
+        y: 0,
+        vx: 0,
+        vy: 0,
+        grounded: false,
+        support: null,
+        facing: 1,
+        jumpQueued: false,
+        dashQueued: false,
+        poundQueued: false,
+        dashTimer: 0,
+        dashCooldown: 0,
+        groundPound: false,
+        emoteIndex: -1,
+        emoteTimer: 0
+      };
+
+      function measurePlatforms() {
+        return platforms.map(el => {
+          const rect = el.getBoundingClientRect();
+          return {
+            el,
+            left: rect.left + scrollX,
+            right: rect.right + scrollX,
+            top: rect.top + scrollY,
+            width: rect.width,
+            height: rect.height
+          };
+        }).filter(rect => rect.width > 0 && rect.height > 0);
+      }
+
+      function measurePortals() {
+        return portals.map(el => {
+          const rect = el.getBoundingClientRect();
+          const nav = el.closest('nav').getBoundingClientRect();
+          // Clip to the navigation, so a collapsed phone menu has no active portals.
+          return {
+            el,
+            left: Math.max(rect.left, nav.left) + scrollX,
+            right: Math.min(rect.right, nav.right) + scrollX,
+            top: Math.max(rect.top, nav.top) + scrollY,
+            bottom: Math.min(rect.bottom, nav.bottom) + scrollY
+          };
+        }).filter(rect => rect.right > rect.left && rect.bottom > rect.top);
+      }
+
+      function touchesPortal(from, to, rect) {
+        // Sweep Jensen's body over the full movement step, including fast dashes and falls.
+        let enter = 0;
+        let exit = 1;
+        const axes = [
+          [from.x, to.x - from.x, rect.left - PW + 13, rect.right - 13],
+          [from.y, to.y - from.y, rect.top - FEET, rect.bottom - 7]
+        ];
+        for (const [start, movement, min, max] of axes) {
+          if (movement === 0) {
+            if (start < min || start > max) return false;
+          } else {
+            const a = (min - start) / movement;
+            const b = (max - start) / movement;
+            enter = Math.max(enter, Math.min(a, b));
+            exit = Math.min(exit, Math.max(a, b));
+            if (enter > exit) return false;
+          }
+        }
+        return true;
+      }
+
+      function openPortal(portal) {
+        if (portalDialog.open) return;
+        const name = portal.getAttribute('data-jensen-portal');
+        portalTitle.textContent = `Enter ${name} portal?`;
+        portalDescription.textContent = `Would you like to visit the ${name} page?`;
+        portalVisit.textContent = `Visit ${name}`;
+        portalVisit.setAttribute('href', portal.getAttribute('href'));
+        portalDialog.style.setProperty('--portal-color', portal.style.getPropertyValue('--portal-color'));
+        keys.clear();
+        state.vx = 0;
+        state.jumpQueued = state.dashQueued = state.poundQueued = false;
+        portalDialog.showModal();
+      }
+
+      function checkPortals(previous) {
+        const bounds = measurePortals();
+        const touching = new Set(bounds.filter(rect => touchesPortal(state, state, rect)).map(rect => rect.el));
+        const entered = bounds.find(rect => !portalContacts.has(rect.el) && touchesPortal(previous, state, rect));
+        portalContacts = touching;
+        if (entered) {
+          portalContacts.add(entered.el);
+          openPortal(entered.el);
+        }
+      }
+
+      portalStay.addEventListener('click', () => portalDialog.close());
+      portalDialog.addEventListener('close', () => keys.clear());
+      portals.forEach(portal => portal.addEventListener('click', e => {
+        if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+        e.preventDefault();
+        // Clicking a portal uses the same confirmation as touching it with Jensen.
+        portalContacts.add(portal);
+        openPortal(portal);
+      }));
+
+      function floorTop() {
+        return Math.max(innerHeight, document.documentElement.scrollHeight, document.body.scrollHeight) - 18;
+      }
+
+      function overlapsPlatform(rect) {
+        return state.x + PW - 13 > rect.left && state.x + 13 < rect.right;
+      }
+
+      function resetPosition() {
+        keys.clear();
+        portalContacts.clear();
+        const visible = measurePlatforms().filter(rect =>
+          rect.top >= scrollY + PH && rect.top <= scrollY + innerHeight - 18
+        ).sort((a, b) => a.top - b.top);
+        const platform = visible[0];
+        state.x = platform ? platform.left + Math.min(24, Math.max(0, (platform.width - PW) / 2)) : (innerWidth - PW) / 2;
+        state.y = platform ? platform.top - FEET : Math.min(scrollY + innerHeight - PH - 26, floorTop() - FEET);
+        state.vx = state.vy = 0;
+        state.grounded = Boolean(platform);
+        state.support = platform ? platform.el : null;
+        state.facing = 1;
+        state.jumpQueued = state.dashQueued = state.poundQueued = false;
+        state.dashTimer = state.dashCooldown = 0;
+        state.groundPound = false;
+        state.emoteIndex = -1;
+        state.emoteTimer = 0;
+        runFrameClock = runFrameIndex = 0;
+        render(0);
+      }
+
+      function setFrame(col, row) {
+        sprite.style.backgroundPosition = `${-(col * SLOT_W)}px ${-(row * SLOT_H)}px`;
+      }
+
+      function queueAction(action) {
+        if (portalDialog.open) return;
+        if (action === 'jump') state.jumpQueued = true;
+        if (action === 'dash') state.dashQueued = true;
+        if (action === 'pound') state.poundQueued = true;
+        if (action === 'emote') startEmote();
+      }
+
+      function startEmote() {
+        state.emoteIndex = (state.emoteIndex + 1) % EMOTES.length;
+        state.emoteTimer = EMOTES[state.emoteIndex].frames * 10;
+        render(0);
+      }
+
+      function onKeyDown(e) {
+        if (portalDialog.open) return;
+        const tag = e.target && e.target.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.target?.isContentEditable) return;
+        const code = e.code;
+        if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'Space'].includes(code)) e.preventDefault();
+        keys.add(code);
+        if (!e.repeat && ['Space', 'ArrowUp', 'KeyW'].includes(code)) queueAction('jump');
+        if (!e.repeat && ['ShiftLeft', 'ShiftRight', 'KeyX'].includes(code)) queueAction('dash');
+        if (!e.repeat && code === 'KeyS') queueAction('pound');
+        if (!e.repeat && code === 'KeyE') queueAction('emote');
+        if (!e.repeat && code === 'KeyR') resetPosition();
+      }
+
+      addEventListener('keydown', onKeyDown, { passive: false });
+      addEventListener('keyup', e => keys.delete(e.code));
+      addEventListener('blur', () => keys.clear());
+      resetBtn.addEventListener('click', resetPosition);
+
+      if (touch) {
+        touch.querySelectorAll('[data-jensen-key]').forEach(btn => {
+          const code = btn.dataset.jensenKey;
+          btn.addEventListener('pointerdown', e => {
+            e.preventDefault();
+            btn.setPointerCapture(e.pointerId);
+            keys.add(code);
+          });
+          const up = () => keys.delete(code);
+          btn.addEventListener('pointerup', up);
+          btn.addEventListener('pointercancel', up);
+          btn.addEventListener('lostpointercapture', up);
+        });
+        touch.querySelectorAll('[data-jensen-tap]').forEach(btn => {
+          btn.addEventListener('pointerdown', e => {
+            e.preventDefault();
+            queueAction(btn.dataset.jensenTap);
+          });
+        });
+      }
+
+      function simulate(dt) {
+        if (portalDialog.open) return;
+        const previous = { x: state.x, y: state.y };
+        state.emoteTimer = Math.max(0, state.emoteTimer - dt);
+        const surfaces = measurePlatforms();
+        const floor = floorTop();
+
+        // Keep a grounded player attached when responsive layout or fonts move a platform.
+        if (state.grounded) {
+          if (state.support) {
+            const support = surfaces.find(rect => rect.el === state.support);
+            if (support && overlapsPlatform(support)) {
+              state.y = support.top - FEET;
+            } else {
+              state.grounded = false;
+              state.support = null;
+            }
+          } else {
+            state.y = floor - FEET;
+          }
+        }
+
+        const left = keys.has('ArrowLeft') || keys.has('KeyA');
+        const right = keys.has('ArrowRight') || keys.has('KeyD');
+        const moving = left !== right;
+        if (left) { state.vx -= 0.86 * dt; state.facing = -1; }
+        if (right) { state.vx += 0.86 * dt; state.facing = 1; }
+        if (!moving && state.dashTimer <= 0) state.vx *= Math.pow(0.80, dt);
+        const maxSpeed = state.dashTimer > 0 ? 18 : 6.4;
+        state.vx = Math.max(-maxSpeed, Math.min(maxSpeed, state.vx));
+
+        if (state.jumpQueued) {
+          if (state.grounded) {
+            // Reach the next platform, or the navigation portals above the social buttons.
+            const feet = state.y + FEET;
+            const above = surfaces.filter(rect => rect.top < feet - 1 && overlapsPlatform(rect))
+              .sort((a, b) => b.top - a.top)[0];
+            const portalTops = measurePortals().filter(rect => rect.top < feet - 1).map(rect => rect.top);
+            const nextTop = above ? above.top : (portalTops.length ? Math.min(...portalTops) : feet);
+            const jumpHeight = Math.max(270, feet - nextTop + 32);
+            state.vy = -Math.sqrt(2 * 0.78 * jumpHeight) - 0.39;
+            state.grounded = false;
+            state.support = null;
+          }
+          state.jumpQueued = false;
+        }
+        if (state.dashQueued) {
+          if (state.dashCooldown <= 0) {
+            state.vx = state.facing * 18;
+            state.dashTimer = 10;
+            state.dashCooldown = 42;
+          }
+          state.dashQueued = false;
+        }
+        if (state.poundQueued) {
+          if (state.grounded && state.support) {
+            // Move the feet past this platform's top so the landing check cannot catch it again.
+            state.y += 2;
+            state.grounded = false;
+            state.support = null;
+          }
+          if (!state.grounded) {
+            state.vy = 20;
+            state.groundPound = true;
+          }
+          state.poundQueued = false;
+        }
+
+        if (!state.grounded) state.vy += 0.78 * dt;
+        if (state.dashTimer > 0) state.dashTimer -= dt;
+        if (state.dashCooldown > 0) state.dashCooldown -= dt;
+        const previousFeet = state.y + FEET;
+        state.x += state.vx * dt;
+        state.y += state.vy * dt;
+
+        if (state.x < -12) { state.x = -12; state.vx = Math.abs(state.vx) * .5; state.facing = 1; }
+        if (state.x > innerWidth - PW + 12) { state.x = innerWidth - PW + 12; state.vx = -Math.abs(state.vx) * .5; state.facing = -1; }
+
+        if (state.grounded && state.support) {
+          const support = surfaces.find(rect => rect.el === state.support);
+          if (!support || !overlapsPlatform(support)) {
+            state.grounded = false;
+            state.support = null;
+          }
+        }
+
+        // One-way platforms: pass through from below, land only when falling across a top.
+        // Check the entire vertical step so a dash or fast fall cannot tunnel through a card.
+        if (!state.grounded && state.vy >= 0) {
+          const nextFeet = state.y + FEET;
+          const landing = surfaces.filter(rect =>
+            overlapsPlatform(rect) && previousFeet <= rect.top + .5 && nextFeet >= rect.top
+          ).sort((a, b) => a.top - b.top)[0];
+          if (landing || nextFeet >= floor) {
+            state.y = (landing ? landing.top : floor) - FEET;
+            state.vy = 0;
+            state.grounded = true;
+            state.support = landing ? landing.el : null;
+            state.groundPound = false;
+          }
+        }
+
+        if (state.y < -PH * .65) {
+          state.y = -PH * .65;
+          state.vy = Math.max(0, state.vy);
+        }
+        checkPortals(previous);
+      }
+
+      function updateSpeech() {
+        const line = state.emoteTimer > 0 ? EMOTES[state.emoteIndex].line
+          : (state.grounded && state.support ? state.support.getAttribute('data-jensen-speech') : null);
+        speech.hidden = !line;
+        if (!line) return;
+        if (speech.textContent !== line) speech.textContent = line;
+
+        // Keep the bubble readable near either viewport edge, with its tail pointing at Jensen.
+        const width = speech.offsetWidth;
+        const viewportX = state.x - scrollX;
+        const left = Math.max(12 - viewportX, Math.min(PW / 2 - width / 2, innerWidth - 12 - viewportX - width));
+        speech.style.left = `${left}px`;
+        speech.style.setProperty('--tail-left', `${Math.max(12, Math.min(width - 12, PW / 2 - left))}px`);
+      }
+
+      function render(dt) {
+        player.style.transform = `translate3d(${state.x - scrollX}px, ${state.y - scrollY}px, 0)`;
+        player.classList.toggle('facing-left', state.facing < 0);
+        player.classList.toggle('jensen-dashing', state.dashTimer > 0);
+        player.classList.toggle('jensen-ground-pound', state.groundPound && state.emoteTimer <= 0);
+        statusText.textContent = state.grounded ? (state.support ? `On ${state.support.getAttribute('data-jensen-platform-label') || 'a card'}` : 'On the ground') : (state.vy < 0 ? 'Jumping' : 'Falling');
+        updateSpeech();
+
+        if (state.emoteTimer > 0) {
+          const emote = EMOTES[state.emoteIndex];
+          const frame = Math.min(emote.frames - 1, Math.floor((emote.frames * 10 - state.emoteTimer) / 10));
+          statusText.textContent = emote.label;
+          setFrame(frame, emote.row);
+          return;
+        }
+
+        if (!state.grounded) {
+          setFrame(state.groundPound ? 4 : 2, state.groundPound ? 2 : 1);
+        } else if (Math.abs(state.vx) > .7) {
+          runFrameClock += dt;
+          if (runFrameClock > 3.2) {
+            runFrameClock = 0;
+            runFrameIndex = (runFrameIndex + 1) % 8;
+          }
+          setFrame(runFrameIndex, 1);
+        } else {
+          runFrameClock = 0;
+          setFrame(0, 0);
+        }
+      }
+
+      function tick(now) {
+        const dt = Math.min(2.2, Math.max(.25, (now - lastTime) / 16.6667));
+        lastTime = now;
+        simulate(dt);
+        render(dt);
+        requestAnimationFrame(tick);
+      }
+
+      addEventListener('scroll', () => render(0), { passive: true });
+      addEventListener('resize', () => {
+        state.x = Math.max(-12, Math.min(state.x, innerWidth - PW + 12));
+        simulate(0);
+        render(0);
+      });
+      scoreText.textContent = `${platforms.length} platforms`;
+      resetPosition();
+      requestAnimationFrame(tick);
+    })();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact – Pascal U</title>
+    <link rel="stylesheet" href="../style.css" />
+    <script defer src="../menu-toggle.js"></script>
+    <script defer src="../dynamic-background.js"></script>
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="jensen-mode.css" />
+    <script defer src="jensen-mode.js"></script>
+</head>
+<body>
+    <header>
+        <div class="branding">
+            <img src="../me.gif" alt="rotating head" width="38" height="38">
+            <h1>Contact</h1>
+        </div>
+        <button class="menu-toggle" aria-label="Toggle navigation">
+            ☰
+        </button>
+        <nav>
+            <ul>
+                <li><a class="jensen-portal" data-jensen-portal="Home" style="--portal-color: #ffd477" href="index.html"><span>Home</span></a></li>
+                <li><a class="jensen-portal" data-jensen-portal="Projects" style="--portal-color: #65d8ff" href="projects.html"><span>Projects</span></a></li>
+                <li><a class="jensen-portal" data-jensen-portal="Papers" style="--portal-color: #ba95ff" href="papers.html"><span>Papers</span></a></li>
+                <li><a href="contact.html" aria-current="page">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section>
+        <article class="card" data-jensen-speech="A good connection beats a cold boot.">
+        <h2>Get in Touch</h2>
+        <p>Email: <a href="mailto:pascalu.csc@gmail.com">pascalu.csc@gmail.com</a>, 
+            <a href="https://www.linkedin.com/in/pascal-u/">LinkedIn</a>, 
+            <a href="https://github.com/pascal-du">GitHub</a>
+        </p>
+        </article>
+
+        <article class="card" data-jensen-speech="Send a message. I'll handle the parallel processing.">
+        <h2>Or send an Email here:</h2>
+        <form action="https://formspree.io/f/mwpbpvrd" method="POST">
+            <label for="name">Name:</label><br />
+            <input type="text" id="name" name="name" required /><br /><br />
+
+            <label for="email">Email:</label><br />
+            <input type="email" id="email" name="_replyto" required /><br /><br />
+
+            <label for="message">Message:</label><br />
+            <textarea id="message" name="message" rows="5" required></textarea><br /><br />
+
+            <button type="submit">Send Message</button>
+        </form>
+        </article>
+    </section>
+
+    <footer>
+        &copy; 2025 Pascal U. All rights reserved.
+    </footer>
+    <div id="jensen-game-layer" aria-hidden="true">
+      <div id="jensen-player">
+        <div id="jensen-sprite"></div>
+        <div id="jensen-speech" hidden></div>
+      </div>
+    </div>
+
+    <aside id="jensen-hud" aria-label="Jensen game controls">
+      <div class="jensen-hud-row">
+        <strong>JENSEN // PLATFORM HOP</strong>
+        <span id="jensen-score">2 platforms</span>
+      </div>
+      <div class="jensen-hud-row">
+        <span id="jensen-status" aria-live="off">On a card</span>
+        <button id="jensen-reset" type="button" title="Return Jensen to a visible platform">Reset position</button>
+      </div>
+      <div id="jensen-help">A/D or ←/→ move · Space jump · Shift dash · S drop / fast fall · E emote · R reset · Scroll to explore</div>
+    </aside>
+
+    <div id="jensen-touch" aria-label="Jensen touch controls">
+      <button type="button" data-jensen-key="ArrowLeft" aria-label="Move left">◀</button>
+      <button type="button" data-jensen-key="ArrowRight" aria-label="Move right">▶</button>
+      <button type="button" data-jensen-tap="jump" aria-label="Jump">↑</button>
+      <button type="button" data-jensen-tap="pound" aria-label="Drop through platform or fall faster" title="Fall / drop through">↓</button>
+      <button type="button" data-jensen-tap="dash" aria-label="Dash">⚡</button>
+      <button type="button" data-jensen-tap="emote" aria-label="Emote">☺</button>
+    </div>
+
+</body>
+</html>
